@@ -11,6 +11,7 @@ syntax: glob
 .classpath
 .project
 .metadata
+.settings
 
 *.launch
 
@@ -20,6 +21,5 @@ dist/
 tomcat/
 www/
 www-test/
-war/resources
-war/nubbles
+war/calculator_ui
 war/WEB-INF
