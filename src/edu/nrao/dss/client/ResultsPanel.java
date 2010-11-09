@@ -19,8 +19,8 @@ public class ResultsPanel extends ContentPanel {
 	}
 	
 	private void initLayout() {
+		setHeading("Results");
 		setBodyBorder(true);
-		setHeaderVisible(false);
 		setLayout(new FitLayout());
 		setSize(900,450);//???
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();

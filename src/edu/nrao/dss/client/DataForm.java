@@ -23,6 +23,7 @@ public class DataForm extends BasicForm {
 
 	// Initial Layout
 	public void initLayout() {
+		setCollapsible(true);
 		nOnPerOff = new GeneralText("nOnPerOff","Enter the number of on-source or on frequency per off observations");
 		rSigRef = new GeneralText("rSigRef","Enter ratio of time spent on the signal observation to the reference observation");
 		nOverlap = new GeneralCombo("nOverlap","Enter number of spectral windows centered",  new ArrayList<String>(Arrays.asList("1","2")));

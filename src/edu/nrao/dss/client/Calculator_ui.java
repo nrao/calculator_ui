@@ -1,6 +1,9 @@
 package edu.nrao.dss.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.extjs.gxt.ui.client.Style.Orientation;
+import com.extjs.gxt.ui.client.Style.Scroll;
+import com.extjs.gxt.ui.client.Style.VerticalAlignment;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
@@ -10,6 +13,9 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.ColumnData;
 import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.layout.RowLayout;
+import com.extjs.gxt.ui.client.widget.layout.TableData;
+import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -19,66 +25,58 @@ public class Calculator_ui implements EntryPoint {
 	public TabPanel tabPanel;
 
 	public void onModuleLoad() {
-		// TODO: figure out how size content without static sizes
-
+		initLayout();
+	}
+	
+	public void initLayout(){
+		
 		// Root Content Panel
 		ContentPanel rcp = new ContentPanel();
 		rcp.setFrame(true);
 		rcp.setHeading("Sensitivity Calculator");
-		rcp.setLayout(new ColumnLayout());
-
-		// tabPanel
-		tabPanel = new TabPanel();
-		GeneralForm generalForm = new GeneralForm();
+		rcp.setLayout(new TableLayout(2));
+		
+		TableData tdLeft = new TableData();
+		tdLeft.setVerticalAlign(VerticalAlignment.TOP);
+		tdLeft.setWidth("%50");
+		
+		TableData tdRight = new TableData();
+		tdRight.setVerticalAlign(VerticalAlignment.TOP);
+		tdRight.setWidth("%50");
+		
+		GeneralForm generalForm   = new GeneralForm();
 		HardwareForm hardwareForm = new HardwareForm();
-		SourceForm sourceForm = new SourceForm();
-		DataForm dataForm = new DataForm();
+		SourceForm sourceForm     = new SourceForm();
+		DataForm dataForm         = new DataForm();
 
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
 
-		addTab(generalForm, "General",
-				"Specify your general observation settings.");
-		addTab(hardwareForm, "Hardware",
-				"Specify your hardware configuration settings.");
-		addTab(sourceForm, "Source", "Specify your source information.");
-		addTab(dataForm, "Data Reduction",
-				"Specify your data reduction strategey.");
-
-		rcp.add(tabPanel, new ColumnData(.62));
-
-		LayoutContainer gridArea = new LayoutContainer();
-		gridArea.setLayout(new AccordionLayout());
+		ContentPanel questions = new ContentPanel();
+		questions.setHeading("Questions");
+		questions.setLayout(new RowLayout());
+		questions.setScrollMode(Scroll.AUTO);
+		questions.setHeight(700);
+		questions.setBorders(true);
+		questions.add(generalForm);
+		questions.add(hardwareForm);
+		questions.add(sourceForm);
+		questions.add(dataForm);
+		
+		rcp.add(questions, tdLeft);
 
 		// Data Store Panel
-		ContentPanel ds = new ContentPanel();
-		ds.setCollapsible(true);
-		ds.setHeading("Results");
-		ds.setHeight(500);// WHY Me?
-		ds.setFrame(true);
-		ds.add(new ResultsPanel());
-		gridArea.add(ds);
-
-		// Configuration panel
-		VerticalPanel config = new ConfigPanel();
-		config.setTableWidth("35%");
-		rcp.add(config);
-		rcp.layout();
+		ContentPanel right = new ContentPanel();
+		right.setHeaderVisible(false);
+		right.setHeight(700);
+		right.setFrame(true);
+		right.add(new ResultsPanel());
+		ContentPanel controls = new ContentPanel();
+		controls.setHeading("Controls");
+		controls.setHeight(200);
+		right.add(controls);
+		rcp.add(right, tdRight);
 
 		RootPanel.get().add(rcp);
-		RootPanel.get().add(gridArea);
-		// hardwareForm.initiate();
 	}
-
-	private void addTab(ContentPanel container, String title, String toolTip) {
-		TabItem item = new TabItem(title);
-		item.setId(title);
-		item.getHeader().setToolTip(toolTip);
-		item.setLayout(new FitLayout());
-		item.add(container);
-		item.setSize(600, 600); // TODO: It would be nice not to have to do
-								// this.
-		tabPanel.add(item);
-	}
-
 }

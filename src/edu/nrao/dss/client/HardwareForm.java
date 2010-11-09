@@ -24,6 +24,7 @@ public class HardwareForm extends BasicForm {
 	}
 
 	public void initLayout() {
+		setCollapsible(true);
 		SelectionListener<ButtonEvent> resetHardware = new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
 				initiateHardware();

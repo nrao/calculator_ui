@@ -21,6 +21,7 @@ public class GeneralForm extends BasicForm {
 
 	// Initial Layout
 	public void initLayout() {
+		setCollapsible(true);
 		conversion = new GeneralCombo("conversion", "Conversion",
 				new ArrayList<String>(Arrays.asList("Sensitivity to Time", "Time to Sensitivity")));
 

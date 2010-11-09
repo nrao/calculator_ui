@@ -21,6 +21,7 @@ public class SourceForm extends BasicForm {
 	}
 
 	public void initLayout() {
+		setCollapsible(true);
 		sourceDec = new GeneralText("sourceDec", "Source Declination");
 		minElev = new GeneralText("minElev", "Minimum Elevation");
 		frame = new GeneralCombo("frame", "Frames", getFrames());
