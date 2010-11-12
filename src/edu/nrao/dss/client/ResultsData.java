@@ -49,7 +49,7 @@ public class ResultsData {
 				    		results.add(new Result(key
 				    				             , ResultsData.getString(values.get(0))
 				    				             , ResultsData.getString(values.get(1))
-				    				             , ResultsData.getString(values.get(2))
+				    				             //, ResultsData.getString(values.get(2))
 				    				             ));			    			
 			    		}
 			    	}
@@ -104,7 +104,12 @@ public class ResultsData {
 			    		String key = i.next();
 			    		if (!key.equals("success")) {
 				    		JSONArray values = json.get(key).isArray();
-				    		results.add(new Result(key, values.get(0).toString(), values.get(1).toString(), values.get(2).toString()));			    			
+				    		//results.add(new Result(key, values.get(0).toString(), values.get(1).toString(), values.get(2).toString()));			    			
+				    		results.add(new Result(key
+	    				             , ResultsData.getString(values.get(0))
+	    				             , ResultsData.getString(values.get(1))
+	    				             //, ResultsData.getString(values.get(2))
+	    				             ));
 			    		}
 			    	}
 			    	ResultStore.getResultStore().update();

@@ -86,11 +86,9 @@ public class DataForm extends BasicForm {
 
 	
 	public void notify(String name, String value) {
-		GWT.log("IS Notifing Data: " + name + " = " + value);
 		// handler for mode
 		if (name.equals("switching")) {
 			if (value.equals("Total Power")) {
-				GWT.log("Total Power");
 				nOnPerOff.hide();
 				rSigRef.hide();
 			} else {
@@ -99,12 +97,11 @@ public class DataForm extends BasicForm {
 			}
 
 		}else{
-			GWT.log("Data: Not Switching but'"+name+"'");
+			
 		}
 		
 		if (name.equals("mode")) {
 			if (value.equals("Spectral Line")) {
-				GWT.log("IS Spectral Line");
 				smoothing.show();
 				if (smoothing.getValue()) {
 					smoothingResolution.show();
@@ -123,12 +120,11 @@ public class DataForm extends BasicForm {
 			}
 
 		}else{
-			GWT.log("Not mode but'"+name+"'");
+			
 		}
 		
 		if (name.equals("backend")) {
 			if (value.equals("Spectrometer")) {
-				GWT.log("Spectrometer");
 				nOverlap.show();
 			} else {
 				nOverlap.hide();

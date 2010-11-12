@@ -87,8 +87,7 @@ class JSONCallbackAdapter implements JSONCallback {
 				msg += "No response received from server at " + this.uri + "  This could indicate a network ";
 				msg += "problem, or that the server is down.";
 			}
-            GWT.log("ERORR");
-			MessageBox.alert("Error", error + msg, null);
+            MessageBox.alert("Error", error + msg, null);
 		}
 	}
 
@@ -117,7 +116,6 @@ class JSONRequest implements RequestCallback {
 	public void onResponseReceived(Request request, Response response) {
 		if (cb == null) {
 			// We don't care about the response.
-			GWT.log(" CB IS NULL");
 			return;
 		}
 		//GWT.log(response.getText(), new Throwable());
@@ -132,12 +130,9 @@ class JSONRequest implements RequestCallback {
 		    if (json == null) {
 			    MessageBox.alert("Error", "Expected JSON response.", null);
 		    } else if (json.containsKey("error")) {
-			    GWT.log(" erorr key");
-		    	cb.onError(getString(json, "error"), json);
+			    cb.onError(getString(json, "error"), json);
 		    } else {
-		    	GWT.log(" SUCCESS  g");
-			    cb.onSuccess(json);
-			    GWT.log(" SUCCESS GOOD");
+		    	cb.onSuccess(json);
 		    }
 		} catch (Exception e) {
 			e.printStackTrace();

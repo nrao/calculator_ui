@@ -17,8 +17,7 @@ public class HardwareForm extends BasicForm {
 	private GeneralCombo backendCombo, modeCombo, receiverCombo;
 	private GeneralCombo beamCombo, polarizationCombo, bandwidthCombo;
 	private GeneralCombo windowCombo, switchingCombo, integrationCombo;
-	private Button reset;
-
+	
 	public HardwareForm() {
 		super("Hardware Information");
 	}
@@ -45,8 +44,7 @@ public class HardwareForm extends BasicForm {
 
 		// sets combo stores
 		initiateHardware();
-		reset = new Button("Reset");
-
+		
 		backendCombo.addListener(Events.Select, new HardwareChanger());
 		modeCombo.addListener(Events.Select, new HardwareChanger());
 		receiverCombo.addListener(Events.Select, new HardwareChanger());
@@ -57,7 +55,6 @@ public class HardwareForm extends BasicForm {
 		integrationCombo.addListener(Events.Select, new HardwareChanger());
 		switchingCombo.addListener(Events.Select, new HardwareChanger());
 
-		reset.addSelectionListener(resetHardware);
 		// attaching fields
 		this.add(backendCombo);
 		this.add(modeCombo);
@@ -68,7 +65,6 @@ public class HardwareForm extends BasicForm {
 		this.add(windowCombo);
 		this.add(integrationCombo);
 		this.add(switchingCombo);
-		this.add(reset);
 	}
 
 	public void validate() {
@@ -114,7 +110,6 @@ public class HardwareForm extends BasicForm {
 			return getCombos().get(name);
 		} catch (Exception e) {
 
-			GWT.log("GetCombo Error " + e.getMessage());
 			return new GeneralCombo();
 		}
 
@@ -138,7 +133,6 @@ public class HardwareForm extends BasicForm {
 							if (!key.equals("success")) {
 								JSONArray values = json.get(key).isArray();
 								for (int x = 0; x < values.size(); x++) {
-									GWT.log(x + ":" + values.get(x).isString());
 									options.add(values.get(x).isString()
 											.stringValue());
 								}
@@ -174,8 +168,6 @@ public class HardwareForm extends BasicForm {
 								if (!key.equals("success")) {
 									JSONArray values = json.get(key).isArray();
 									for (int x = 0; x < values.size(); x++) {
-										GWT.log(x + ":>"
-												+ values.get(x).isString());
 										options.add(values.get(x).toString());
 									}
 									getCombo(key).setComboStore(options);

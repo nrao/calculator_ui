@@ -91,7 +91,6 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 	public void setComboStore(ArrayList<String> array) {
 		this.getStore().removeAll();
 		for (String key : array) {
-			GWT.log(this.getName()+" = "+key);
 			key = key.replace("\"", "");
 			ComboModel option = new ComboModel(key);
 			this.getStore().add(option);

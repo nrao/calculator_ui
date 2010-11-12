@@ -11,11 +11,11 @@ public class Result extends BaseModel {
 	public Result() {
     }
     
-    public Result(String term, String value, String units, String equation) {
+    public Result(String term, String value, String units) {
     	set("term", term);
     	set("value", value);
     	set("units", units);
-    	set("equation", equation);
+    	//set("equation", equation);
     }
     
     public String getName() {

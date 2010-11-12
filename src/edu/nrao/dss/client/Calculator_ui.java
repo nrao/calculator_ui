@@ -28,7 +28,7 @@ public class Calculator_ui implements EntryPoint {
 		initLayout();
 	}
 	
-	public void initLayout(){
+	private void initLayout(){
 		
 		// Root Content Panel
 		ContentPanel rcp = new ContentPanel();
@@ -38,11 +38,11 @@ public class Calculator_ui implements EntryPoint {
 		
 		TableData tdLeft = new TableData();
 		tdLeft.setVerticalAlign(VerticalAlignment.TOP);
-		tdLeft.setWidth("%50");
+		tdLeft.setWidth("550");
 		
 		TableData tdRight = new TableData();
 		tdRight.setVerticalAlign(VerticalAlignment.TOP);
-		tdRight.setWidth("%50");
+		tdRight.setWidth("550");
 		
 		GeneralForm generalForm   = new GeneralForm();
 		HardwareForm hardwareForm = new HardwareForm();
@@ -65,17 +65,15 @@ public class Calculator_ui implements EntryPoint {
 		
 		rcp.add(questions, tdLeft);
 
-		// Data Store Panel
-		ContentPanel right = new ContentPanel();
-		right.setHeaderVisible(false);
-		right.setHeight(700);
-		right.setFrame(true);
-		right.add(new ResultsPanel());
-		ContentPanel controls = new ContentPanel();
-		controls.setHeading("Controls");
-		controls.setHeight(200);
-		right.add(controls);
-		rcp.add(right, tdRight);
+//		ContentPanel right = new ContentPanel();
+//		right.setHeaderVisible(false);
+//		right.setHeight(700);
+//		right.setFrame(true);
+//		right.add(new ResultsPanel());
+//		ControlsPanel controls = new ControlsPanel();
+//		right.add(controls);
+//		rcp.add(right, tdRight);
+		rcp.add(new ResultsPanel(), tdRight);
 
 		RootPanel.get().add(rcp);
 	}

@@ -14,7 +14,7 @@ import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
 
 public abstract class BasicForm extends FormPanel {
-	private Button update, retrieve, reset;
+	private Button update, reset;
 	public ArrayList<BasicForm> observers = new ArrayList<BasicForm>();
 	FormButtonBinding saveBinding = new FormButtonBinding(this);
 
@@ -36,18 +36,15 @@ public abstract class BasicForm extends FormPanel {
 		
 		
 		update = new Button("Save");
-		retrieve = new Button("Retrieve");
 		reset = new Button("Reset");
 
 		update.addSelectionListener(updateTerms);
-		retrieve.addSelectionListener(getTerms);
 		reset.addSelectionListener(resetTerms);
 		saveBinding.addButton(update);
 		
 		TableData td = new TableData();
 		td.setHorizontalAlign(HorizontalAlignment.CENTER);
 		buttons.add(update, td);
-		buttons.add(retrieve, td);
 		buttons.add(reset, td);
 		
 		add(buttons);
@@ -77,7 +74,7 @@ public abstract class BasicForm extends FormPanel {
 	SelectionListener<ButtonEvent> updateTerms = new SelectionListener<ButtonEvent>() {
 		public void componentSelected(ButtonEvent ce) {
 			submit();
-			// ResultsData.fetchResults();
+			ResultsData.fetchResults();
 		}
 	};
 
