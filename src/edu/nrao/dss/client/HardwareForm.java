@@ -8,7 +8,12 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.util.Margins;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.LabelField;
+import com.extjs.gxt.ui.client.widget.layout.MarginData;
+import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -16,7 +21,7 @@ import com.google.gwt.json.client.JSONObject;
 public class HardwareForm extends BasicForm {
 	private GeneralCombo backendCombo, modeCombo, receiverCombo;
 	private GeneralCombo beamCombo, polarizationCombo, bandwidthCombo;
-	private GeneralCombo windowCombo, switchingCombo, integrationCombo;
+	private GeneralCombo windowCombo, switchingCombo;
 	
 	public HardwareForm() {
 		super("Hardware Information");
@@ -36,8 +41,6 @@ public class HardwareForm extends BasicForm {
 		beamCombo = new GeneralCombo("beams", "Beams");
 		polarizationCombo = new GeneralCombo("polarization", "Polarization");
 		bandwidthCombo = new GeneralCombo("bandwidth", "BandWidth");
-		integrationCombo = new GeneralCombo("integration",
-				"Minimum Allowable integration");
 		windowCombo = new GeneralCombo("windows", "Number of spectrtal windows");
 		switchingCombo = new GeneralCombo("switching", "Switching mode");
 
@@ -52,19 +55,19 @@ public class HardwareForm extends BasicForm {
 		polarizationCombo.addListener(Events.Select, new HardwareChanger());
 		bandwidthCombo.addListener(Events.Select, new HardwareChanger());
 		windowCombo.addListener(Events.Select, new HardwareChanger());
-		integrationCombo.addListener(Events.Select, new HardwareChanger());
 		switchingCombo.addListener(Events.Select, new HardwareChanger());
 
 		// attaching fields
-		this.add(backendCombo);
-		this.add(modeCombo);
-		this.add(receiverCombo);
-		this.add(beamCombo);
-		this.add(polarizationCombo);
-		this.add(bandwidthCombo);
-		this.add(windowCombo);
-		this.add(integrationCombo);
-		this.add(switchingCombo);
+		String instructions = "Answer questions from top to bottom.  If you change a question that was answered previously, check all answers that follow.  Some answers will dictate the answer for other questions.";
+		add(new Label(instructions));
+		add(backendCombo);
+		add(modeCombo);
+		add(receiverCombo);
+		add(beamCombo);
+		add(polarizationCombo);
+		add(bandwidthCombo);
+		add(windowCombo);
+		add(switchingCombo);
 	}
 
 	public void validate() {
@@ -84,7 +87,6 @@ public class HardwareForm extends BasicForm {
 		selected.put(polarizationCombo.getName(), polarizationCombo.getValue());
 		selected.put(bandwidthCombo.getName(), bandwidthCombo.getValue());
 		selected.put(windowCombo.getName(), windowCombo.getValue());
-		selected.put(integrationCombo.getName(), integrationCombo.getValue());
 		selected.put(switchingCombo.getName(), switchingCombo.getValue());
 		return selected;
 	}
@@ -99,7 +101,6 @@ public class HardwareForm extends BasicForm {
 		hm.put(polarizationCombo.getName(), polarizationCombo);
 		hm.put(bandwidthCombo.getName(), bandwidthCombo);
 		hm.put(windowCombo.getName(), windowCombo);
-		hm.put(integrationCombo.getName(), integrationCombo);
 		hm.put(switchingCombo.getName(), switchingCombo);
 		return hm;
 

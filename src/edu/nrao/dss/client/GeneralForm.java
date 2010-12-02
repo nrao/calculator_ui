@@ -49,9 +49,12 @@ public class GeneralForm extends BasicForm {
 
 		// Desired sensitivity
 		sensitivity = new GeneralText("sensitivity", "Enter Desired Sensitivity");
+		sensitivity.setMaxLength(6);
+		sensitivity.setWidth(10);
 		
 		// Desired time
 		time = new GeneralText("time", "Enter Desired Time");
+		time.setMaxLength(6);
 		time.setAllowBlank(true);
 		time.hide();
 		

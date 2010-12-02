@@ -56,8 +56,9 @@ public class Calculator_ui implements EntryPoint {
 		questions.setHeading("Questions");
 		questions.setLayout(new RowLayout());
 		questions.setScrollMode(Scroll.AUTO);
-		questions.setHeight(700);
+		questions.setHeight(800);
 		questions.setBorders(true);
+		questions.setAutoWidth(true);
 		questions.add(generalForm);
 		questions.add(hardwareForm);
 		questions.add(sourceForm);
@@ -73,7 +74,9 @@ public class Calculator_ui implements EntryPoint {
 //		ControlsPanel controls = new ControlsPanel();
 //		right.add(controls);
 //		rcp.add(right, tdRight);
-		rcp.add(new ResultsPanel(), tdRight);
+		ResultsPanel results = new ResultsPanel();
+		results.setHeight(800);
+		rcp.add(results, tdRight);
 
 		RootPanel.get().add(rcp);
 	}

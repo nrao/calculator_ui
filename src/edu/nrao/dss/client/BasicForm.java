@@ -24,7 +24,7 @@ public abstract class BasicForm extends FormPanel {
 		setMethod(FormPanel.Method.POST);
 
 		// setting layout
-		setLabelWidth(250);
+		setLabelWidth(200);
 		setLabelAlign(LabelAlign.RIGHT);
 
 		setHeading(title);

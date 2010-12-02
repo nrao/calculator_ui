@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
 
 public class GeneralCombo extends ComboBox<ComboModel> {
 	private ListStore<ComboModel> comboStore = new ListStore<ComboModel>();
@@ -54,7 +55,8 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 		setTriggerAction(TriggerAction.ALL);
 		setEditable(false);
 		setValue(this.getStore().getAt(0));
-		// setForceSelection(true);
+		//setAutoWidth(true);
+		
 	}
 
 	public void addOption(String value) {
@@ -77,7 +79,7 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 			this.enable();
 			// this.setVisible(true);
 		}
-
+		
 	}
 
 	public String getSelected() {
@@ -109,12 +111,19 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 		if (this.getStore().getCount() == 1) {
 			// this.setVisible(false);
 			this.disable();
-
+			
 		} else {
 			this.enable();
 			// this.setVisible(true);
 		}
-
+		getInputEl().setStyleAttribute("background-color", "#C11000");
+		
+		Timer timer = new Timer() {
+			public void run() {
+				getInputEl().setStyleAttribute("background-color", "white");
+			}
+		};
+		timer.schedule(2000);
 	}
 
 }
