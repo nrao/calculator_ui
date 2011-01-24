@@ -10,6 +10,8 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
+import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.core.client.GWT;
 
 public class GeneralForm extends BasicForm {
@@ -18,42 +20,37 @@ public class GeneralForm extends BasicForm {
 
 	public GeneralForm() {
 		super("General Information");
-		//initLayout();
 	}
 
 	// Initial Layout
 	public void initLayout() {
 		//setHeading("General Information");
-		setCollapsible(true);
-		setLabelAlign(LabelAlign.RIGHT);
-		setLabelWidth(250);
 		
 		conversion = new RadioGroup("conversion");
-		conversion.setFieldLabel("Conversion");
+		conversion.setFieldLabel("Derive");
 		conversion.setName("conversion");
 		conversion.setId("conversion");
 		conversion.setOrientation(Orientation.VERTICAL);
 		
 		Radio s2t  = new Radio();
-		s2t.setBoxLabel("Sensitivity to Time");
+		s2t.setBoxLabel("Observing Time from Desired Sensitivity");
 		s2t.setValueAttribute("Sensitivity to Time");
 		s2t.setToolTip("Do you want to calculate sensitivity from a desired observation duration?");
 		s2t.setValue(true);
 		conversion.add(s2t);
 		Radio t2s = new Radio();
-		t2s.setBoxLabel("Time to Sensitivity");
+		t2s.setBoxLabel("Sensitivity from Observing Time");
 		t2s.setToolTip("Do you want to calculate observation duration from a desired sensitivity?");
 		t2s.setValueAttribute("Time to Sensitivity");
 		conversion.add(t2s);
 		
 
 		// Desired sensitivity
-		sensitivity = new GeneralText("sensitivity", "Enter Desired Sensitivity");
+		sensitivity = new GeneralText("sensitivity", "Desired Sensitivity");
 		sensitivity.setMaxLength(6);
-		sensitivity.setWidth(10);
 		
 		// Desired time
-		time = new GeneralText("time", "Enter Desired Time");
+		time = new GeneralText("time", "Observing Time (in sec)");
 		time.setMaxLength(6);
 		time.setAllowBlank(true);
 		time.hide();
@@ -66,7 +63,7 @@ public class GeneralForm extends BasicForm {
 		units.setId("units");
 		
 		Radio choice = new Radio();
-		choice.setBoxLabel("flux density (mJy)");
+		choice.setBoxLabel("Flux Density (mJy)");
 		choice.setName("flux");
 		choice.setValueAttribute("flux");
 		choice.setToolTip("Use flux density (mJy) for sensitivity units.");
@@ -106,19 +103,21 @@ public class GeneralForm extends BasicForm {
 		semester.add(choice);
 		
 		choice = new Radio();
-		choice.setBoxLabel("All");
-		choice.setValueAttribute("All");
-		choice.setName("All");
+		choice.setBoxLabel("Full Year");
+		choice.setValueAttribute("Full Year");
+		choice.setName("Full Year");
 		semester.add(choice);
 
 		// attach listeners
 		conversion.addListener(Events.Change, new handleConversion());
 
+		FormData fd = new FormData(50, 20);
+		
 		// attaching fields
 		add(conversion);
 		add(units);
-		add(sensitivity);
-		add(time);
+		add(sensitivity, fd);
+		add(time, fd);
 		add(semester);
 
 	}

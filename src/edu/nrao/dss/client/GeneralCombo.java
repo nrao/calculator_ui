@@ -56,7 +56,6 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 		setEditable(false);
 		setValue(this.getStore().getAt(0));
 		//setAutoWidth(true);
-		
 	}
 
 	public void addOption(String value) {

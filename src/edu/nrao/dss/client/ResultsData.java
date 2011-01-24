@@ -14,9 +14,9 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 
 public class ResultsData {
-	public static List<Result> results = new ArrayList<Result>();
+	public static HashMap<String, Result> results = new HashMap<String, Result>();
 	
-	public static List<Result> getResults() {
+	public static HashMap<String, Result> getResults() {
 		return results;
 	}
 	
@@ -36,7 +36,7 @@ public class ResultsData {
             new JSONCallbackAdapter() {
 			    public void onSuccess(JSONObject json) {   
 			    	if (json.get("success").isString().stringValue().toString().equals("ok")) {
-			    		ResultsData.results.clear(); // ok to proceed
+			    		results.clear(); // ok to proceed
 			    	} else {
 			    		// TODO: return error notification to user
 			    		return;
@@ -46,7 +46,8 @@ public class ResultsData {
 			    		String key = i.next();
 			    		if (!key.equals("success")) {
 				    		JSONArray values = json.get(key).isArray();
-				    		results.add(new Result(key
+				    		results.put(key
+				    				  , new Result(key
 				    				             , ResultsData.getString(values.get(0))
 				    				             , ResultsData.getString(values.get(1))
 				    				             //, ResultsData.getString(values.get(2))
@@ -105,11 +106,12 @@ public class ResultsData {
 			    		if (!key.equals("success")) {
 				    		JSONArray values = json.get(key).isArray();
 				    		//results.add(new Result(key, values.get(0).toString(), values.get(1).toString(), values.get(2).toString()));			    			
-				    		results.add(new Result(key
-	    				             , ResultsData.getString(values.get(0))
-	    				             , ResultsData.getString(values.get(1))
-	    				             //, ResultsData.getString(values.get(2))
-	    				             ));
+				    		results.put(key
+				    				  , new Result(key
+	    				                         , ResultsData.getString(values.get(0))
+	    				                         , ResultsData.getString(values.get(1))
+	    				                         //, ResultsData.getString(values.get(2))
+	    				                          ));
 			    		}
 			    	}
 			    	ResultStore.getResultStore().update();

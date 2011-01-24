@@ -1,10 +1,14 @@
 package edu.nrao.dss.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.EntryPoint;
+import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.VerticalAlignment;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
@@ -48,23 +52,46 @@ public class Calculator_ui implements EntryPoint {
 		HardwareForm hardwareForm = new HardwareForm();
 		SourceForm sourceForm     = new SourceForm();
 		DataForm dataForm         = new DataForm();
+		
+//		ArrayList<BasicForm> forms = new ArrayList<BasicForm>();
+//		forms.add(generalForm);
+//		forms.add(hardwareForm);
+//		forms.add(sourceForm);
+//		forms.add(dataForm);
 
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
 
 		ContentPanel questions = new ContentPanel();
+		questions.setHeaderVisible(false);
 		questions.setHeading("Questions");
 		questions.setLayout(new RowLayout());
 		questions.setScrollMode(Scroll.AUTO);
 		questions.setHeight(800);
 		questions.setBorders(true);
 		questions.setAutoWidth(true);
+		
 		questions.add(generalForm);
 		questions.add(hardwareForm);
 		questions.add(sourceForm);
 		questions.add(dataForm);
 		
 		rcp.add(questions, tdLeft);
+		
+//		HorizontalPanel formControls = new HorizontalPanel();
+//		//formControls.setLayout(new RowLayout());
+//		formControls.setBorders(false);
+//		
+//		TableData fctd            = new TableData();
+//		fctd.setHorizontalAlign(HorizontalAlignment.CENTER);
+//		formControls.add(new CalculatorButton(forms), fctd);
+//		
+//		ContentPanel left = new ContentPanel();
+//		left.setHeading("Questions");
+//		left.add(formControls);
+//		left.add(questions);
+//		
+//		rcp.add(left, tdLeft);
 
 //		ContentPanel right = new ContentPanel();
 //		right.setHeaderVisible(false);

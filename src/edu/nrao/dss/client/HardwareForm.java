@@ -28,34 +28,41 @@ public class HardwareForm extends BasicForm {
 	}
 
 	public void initLayout() {
-		setCollapsible(true);
-		SelectionListener<ButtonEvent> resetHardware = new SelectionListener<ButtonEvent>() {
-			public void componentSelected(ButtonEvent ce) {
-				initiateHardware();
-			}
-		};
-
-		backendCombo = new GeneralCombo("backend", "Backend");
-		modeCombo = new GeneralCombo("mode", "Mode");
-		receiverCombo = new GeneralCombo("receiver", "Receiver");
-		beamCombo = new GeneralCombo("beams", "Beams");
+		backendCombo      = new GeneralCombo("backend", "Backend");
+		modeCombo         = new GeneralCombo("mode", "Mode");
+		receiverCombo     = new GeneralCombo("receiver", "Receiver");
+		beamCombo         = new GeneralCombo("beams", "Beams");
 		polarizationCombo = new GeneralCombo("polarization", "Polarization");
-		bandwidthCombo = new GeneralCombo("bandwidth", "BandWidth");
-		windowCombo = new GeneralCombo("windows", "Number of spectrtal windows");
-		switchingCombo = new GeneralCombo("switching", "Switching mode");
+		bandwidthCombo    = new GeneralCombo("bandwidth", "BandWidth (MHz)");
+		windowCombo       = new GeneralCombo("windows", "Number of Spectrtal Windows");
+		switchingCombo    = new GeneralCombo("switching", "Switching Mode");
 
 
 		// sets combo stores
 		initiateHardware();
 		
-		backendCombo.addListener(Events.Select, new HardwareChanger());
-		modeCombo.addListener(Events.Select, new HardwareChanger());
-		receiverCombo.addListener(Events.Select, new HardwareChanger());
-		beamCombo.addListener(Events.Select, new HardwareChanger());
-		polarizationCombo.addListener(Events.Select, new HardwareChanger());
-		bandwidthCombo.addListener(Events.Select, new HardwareChanger());
-		windowCombo.addListener(Events.Select, new HardwareChanger());
-		switchingCombo.addListener(Events.Select, new HardwareChanger());
+		Listener<FieldEvent> hwchanger = new Listener<FieldEvent> (){
+			public void handleEvent(FieldEvent fe) {
+				HashMap<String, Object> selected = getSelected();
+				if (selected.get("backend") != null) {
+					JSONRequest.post("/calculator/set_hardware", selected,
+							new JSONCallbackAdapter() {
+								public void onSuccess(JSONObject json) {
+									parseJSON(json);
+								}
+							});
+				}
+			}
+		};
+		
+		backendCombo.addListener(Events.Select,      hwchanger);
+		modeCombo.addListener(Events.Select,         hwchanger);
+		receiverCombo.addListener(Events.Select,     hwchanger);
+		beamCombo.addListener(Events.Select,         hwchanger);
+		polarizationCombo.addListener(Events.Select, hwchanger);
+		bandwidthCombo.addListener(Events.Select,    hwchanger);
+		windowCombo.addListener(Events.Select,       hwchanger);
+		switchingCombo.addListener(Events.Select,    hwchanger);
 
 		// attaching fields
 		String instructions = "Answer questions from top to bottom.  If you change a question that was answered previously, check all answers that follow.  Some answers will dictate the answer for other questions.";
@@ -115,70 +122,41 @@ public class HardwareForm extends BasicForm {
 		}
 
 	}
+	private void parseJSON(JSONObject json) {
+		if (json.get("success").isString().stringValue()
+				.toString().equals("ok")) {
+		} else {
+			// TODO: return error notification to user
+			return;
+		}
+
+		for (Iterator<String> i = json.keySet().iterator(); i.hasNext();) {
+			String key = i.next();
+			ArrayList<String> options = new ArrayList<String>();
+			if (!key.equals("success")) {
+				if (key.equals("backend")) {
+					options.add("");
+				}
+				
+				JSONArray values = json.get(key).isArray();
+				for (int x = 0; x < values.size(); x++) {
+					options.add(values.get(x).toString());
+				}
+				getCombo(key).reset();
+				getCombo(key).setComboStore(options);
+			}
+		}
+		notifyAllForms();
+		//ResultsData.fetchResults();
+	}
 
 	public void initiateHardware() {
 		// gets the initial store for the combo boxes
 		JSONRequest.get("/calculator/initiate_hardware",
 				new JSONCallbackAdapter() {
 					public void onSuccess(JSONObject json) {
-						if (json.get("success").isString().stringValue()
-								.toString().equals("ok")) {
-						} else {
-							// TODO: return error notification to user
-							return;
-						}
-						for (Iterator<String> i = json.keySet().iterator(); i
-								.hasNext();) {
-							String key = i.next();
-							ArrayList<String> options = new ArrayList<String>();
-							if (!key.equals("success")) {
-								JSONArray values = json.get(key).isArray();
-								for (int x = 0; x < values.size(); x++) {
-									options.add(values.get(x).isString()
-											.stringValue());
-								}
-								getCombo(key).initiateComboStore(options);
-							}
-						}
-						notifyAllForms();
-						//ResultsData.fetchResults();
+						parseJSON(json);
 					}
 				});
 	}
-
-
-
-	class HardwareChanger implements Listener<FieldEvent> {
-		public void handleEvent(FieldEvent fe) {
-			HashMap<String, Object> selected = getSelected();
-			JSONRequest.post("/calculator/set_hardware", selected,
-					new JSONCallbackAdapter() {
-						public void onSuccess(JSONObject json) {
-							if (json.get("success").isString().stringValue()
-									.toString().equals("ok")) {
-
-							} else {
-								// TODO: return error notification to user
-								return;
-							}
-
-							for (Iterator<String> i = json.keySet().iterator(); i
-									.hasNext();) {
-								String key = i.next();
-								ArrayList<String> options = new ArrayList<String>();
-								if (!key.equals("success")) {
-									JSONArray values = json.get(key).isArray();
-									for (int x = 0; x < values.size(); x++) {
-										options.add(values.get(x).toString());
-									}
-									getCombo(key).setComboStore(options);
-								}
-							}
-							notifyAllForms();
-							//ResultsData.fetchResults();
-						}
-					});
-		}
-	}
-
 }

@@ -1,5 +1,7 @@
 package edu.nrao.dss.client;
 
+import java.util.ArrayList;
+
 import com.extjs.gxt.ui.client.store.ListStore;
 
 public class ResultStore extends ListStore<Result> {
@@ -17,7 +19,7 @@ public class ResultStore extends ListStore<Result> {
 
     public void update() {
     	removeAll();
-    	add(ResultsData.getResults());
+    	add(new ArrayList<Result>(ResultsData.getResults().values()));
     }
     
     private static ResultStore singleton;

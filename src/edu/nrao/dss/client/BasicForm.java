@@ -14,12 +14,13 @@ import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
 
 public abstract class BasicForm extends FormPanel {
-	private Button update, reset;
+	private Button update;
 	public ArrayList<BasicForm> observers = new ArrayList<BasicForm>();
 	FormButtonBinding saveBinding = new FormButtonBinding(this);
 
 	public BasicForm(String title) {
 		setFrame(true);
+		setCollapsible(true);
 		setAction("/calculator/set_terms/");
 		setMethod(FormPanel.Method.POST);
 
@@ -35,17 +36,14 @@ public abstract class BasicForm extends FormPanel {
 		buttons.setSpacing(10);
 		
 		
-		update = new Button("Save");
-		reset = new Button("Reset");
-
+		update = new Button("Update Results");
+		
 		update.addSelectionListener(updateTerms);
-		reset.addSelectionListener(resetTerms);
 		saveBinding.addButton(update);
 		
 		TableData td = new TableData();
 		td.setHorizontalAlign(HorizontalAlignment.CENTER);
 		buttons.add(update, td);
-		buttons.add(reset, td);
 		
 		add(buttons);
 
@@ -81,12 +79,6 @@ public abstract class BasicForm extends FormPanel {
 	SelectionListener<ButtonEvent> getTerms = new SelectionListener<ButtonEvent>() {
 		public void componentSelected(ButtonEvent ce) {
 			ResultsData.fetchResults();
-		}
-	};
-
-	SelectionListener<ButtonEvent> resetTerms = new SelectionListener<ButtonEvent>() {
-		public void componentSelected(ButtonEvent ce) {
-			ResultsData.resetResults();
 		}
 	};
 
