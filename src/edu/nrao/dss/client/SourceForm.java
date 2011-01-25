@@ -30,6 +30,8 @@ public class SourceForm extends BasicForm {
 	private Slider diameter;
 	private String validatedSourceDec;
 	private LabelField diameter_display;
+	private double c      = 3e10; // speed of light in cm/s
+	
 	
 	public SourceForm() {
 		super("Source Information");
@@ -73,15 +75,13 @@ public class SourceForm extends BasicForm {
 		frame.add(choice);
 		
 		galactic = new RadioGroup("galactic");
-		galactic.setFieldLabel("Source Contribution Corrections");
+		galactic.setFieldLabel("Source Contribution to System Temperature");
 		galactic.setName("galactic");
 		galactic.setId("galactic");
 		galactic.setOrientation(Orientation.VERTICAL);
 		
 		choice = new Radio();
 		choice.setBoxLabel("No Correction");
-		//choice.setBoxLabel("Assume there is no contribution from the source to Tsys");
-		//choice.setToolTip("No correction for the sources contribution.");
 		choice.setToolTip("Assume there is no contribution from the source to Tsys.");
 		choice.setValueAttribute("no_correction");
 		choice.setName("no_correction");
@@ -90,9 +90,7 @@ public class SourceForm extends BasicForm {
 		galactic.add(choice);
 		
 		choice = new Radio();
-		choice.setBoxLabel("Estimated");
-		//choice.setBoxLabel("Enter a value for the expected contribution from the source to Tsys");
-		//choice.setToolTip("Enter your own estimate for the contribution from Galactic Continuum.");
+		choice.setBoxLabel("User Estimated Correction");
 		choice.setToolTip("Enter a value for the expected contribution from the source to Tsys.");
 		choice.setValueAttribute("estimated");
 		choice.setName("estimated");
@@ -100,9 +98,7 @@ public class SourceForm extends BasicForm {
 		galactic.add(choice);
 		
 		choice = new Radio();
-		choice.setBoxLabel("Modeled");
-		//choice.setBoxLabel("Use a model of the galactic contribution to Tsys");
-		//choice.setToolTip("Use a standard model for the contribution from Galactic Continuum.");
+		choice.setBoxLabel("Internal Galactic Model");
 		choice.setToolTip("Use a model of the galactic contribution to Tsys.");
 		choice.setValueAttribute("model");
 		choice.setName("model");
@@ -110,20 +106,18 @@ public class SourceForm extends BasicForm {
 		galactic.add(choice);
 		
 		diameter_display = new LabelField("0.0");
-		//diameter_display.setFieldLabel("Source Diameter (arc minutes)");
-		//diameter_display.setLabelSeparator(":");
+		diameter_display.setFieldLabel("Source Diameter (arc minutes)");
+		diameter_display.setLabelSeparator(":");
 		
 		diameter = new Slider();
 		diameter.setMinValue(0);
 		diameter.setMaxValue(12);
 		diameter.setValue(0);
 		diameter.setIncrement(1);
-		//diameter.setUseTip(false);
-		diameter.setMessage("{0}");
+		diameter.setUseTip(false);
 		
 		final SliderField sf = new SliderField(diameter);
-		sf.setFieldLabel("Source Diameter (arc minutes)");
-		//sf.setLabelSeparator("");
+		sf.setLabelSeparator("");
 		sf.setName("source_diameter");
 		sf.setId("source_diameter");
 		
@@ -132,8 +126,6 @@ public class SourceForm extends BasicForm {
 		tBG.setToolTip("Enter contribution of source to continuum level in units of K.");
 		tBG.setValue("0");
         
-		//sourceDec.setRegex("[1-9][0-9]{2}\\.[0-9]{2}","Invalid format");
-		//sourceDec.setRegex("([0-9\\,\\.\\+\\-]+)","Invalid format: Must be a number.");
 		sourceDec.setMessageTarget("side");
 		sourceDec.setValidator(new Validator () {
 
@@ -168,26 +160,7 @@ public class SourceForm extends BasicForm {
 		tBG.hide();
 		tBG.setAllowBlank(true);
 
-		diameter.addListener(Events.Change, new Listener<SliderEvent> () {
-
-			@Override
-			public void handleEvent(SliderEvent se) {
-				// Do we have everything we need?		
-				double c    = 3e10; // speed of light in cm/s
-				double TeDB = 13;
-				if (!topoFreq.getValue().isEmpty() & !restFreq.getValue().isEmpty() & !sourceVelocity.getValue().isEmpty() & !redshift.getValue().isEmpty()) {
-					if (frame.getRawValue().equals("Topocentric Frame")) {
-						double lambda = c / (Double.valueOf(topoFreq.getValue()) * 1e6);
-						double fwhm   = (1.02 + 0.0135 * TeDB) * 3437.7 * (lambda / 20000);
-						double d      = 0.1 * diameter.getValue() * fwhm;
-						diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
-					}
-				}
-			}
-		});
-		frame.addListener(Events.Change, new HandleFrame());
-		doppler.addListener(Events.Select, new HandleDoppler());
-		galactic.addListener(Events.Change, new HandleGalactic());
+		initListeners();
 
 		FormData fd = new FormData(60, 20);
 		 
@@ -198,9 +171,8 @@ public class SourceForm extends BasicForm {
 		add(doppler);
 		add(redshift, fd);
 		add(sourceVelocity, fd);
-		add(sf);
 		add(diameter_display);
-		//add(diameter);
+		add(sf);
 		
 		FieldSet fs = new FieldSet();
 		fs.setHeading("Source Contribution Corrections");
@@ -213,11 +185,91 @@ public class SourceForm extends BasicForm {
 		fs.add(tBG, fd);
 		add(fs);
 		
-		//add(galactic);
-		//add(rightAscension, fd);
-		//add(tBG, fd);
 		add(sourceDec, fd);
 		
+	}
+	
+	private void initListeners() {
+		diameter.addListener(Events.Change, new Listener<SliderEvent> () {
+
+			@Override
+			public void handleEvent(SliderEvent se) {
+				calcDiameter();
+			}
+		});
+		frame.addListener(Events.Change, new HandleFrame());
+		frame.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+		doppler.addListener(Events.Select, new HandleDoppler());
+		doppler.addListener(Events.Select, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+		galactic.addListener(Events.Change, new HandleGalactic());
+		restFreq.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+		topoFreq.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+		redshift.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+		sourceVelocity.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent se) {
+				calcDiameter();
+			}
+		});
+	}
+	
+	private void calcDiameter() {
+		// Do we have everything we need?		
+		if (!topoFreq.getValue().isEmpty() & !restFreq.getValue().isEmpty() & !sourceVelocity.getValue().isEmpty() & !redshift.getValue().isEmpty()) {
+			if (frame.getValue().getValueAttribute().equals("Topocentric Frame")) {
+				double d = 0.1 * diameter.getValue() * calcFWHM(Double.valueOf(topoFreq.getValue()) * 1e6);
+				diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
+			} else {
+				double rfreq = Double.valueOf(restFreq.getValue()) * 1e6;
+				double tfreq = 0;
+				if (doppler.getSelected().equals("Redshift")) {
+					tfreq = rfreq / (1 + Double.valueOf(redshift.getValue()));
+				} else if (doppler.getSelected().equals("Radio")) {
+					tfreq = rfreq * (1 - (Double.valueOf(sourceVelocity.getValue()) * 1e3) / (c * 1e-2));
+				} else {
+					tfreq = rfreq / (1 + (Double.valueOf(sourceVelocity.getValue()) * 1e3) / (c * 1e-2));
+				}
+				double d = 0.1 * diameter.getValue() * calcFWHM(tfreq);
+				diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
+			}
+		}
+	}
+	
+	private double calcFWHM(double freq) {
+		double TeDB   = 13;
+		double lambda = c / freq;
+		return (1.02 + 0.0135 * TeDB) * 3437.7 * (lambda / 20000);
 	}
 	
 	public void validate() {
@@ -299,7 +351,7 @@ public class SourceForm extends BasicForm {
 
 	class HandleDoppler implements Listener<FieldEvent> {
 		public void handleEvent(FieldEvent fe) {
-			if (doppler.getValue().getName("name") == "RedShift") {
+			if (doppler.getValue().getName("name") == "Redshift") {
 				redshift.show();
 				redshift.setAllowBlank(false);
 				sourceVelocity.hide();
@@ -336,7 +388,7 @@ public class SourceForm extends BasicForm {
 	
 	public static ArrayList<String> getDoppler() {
 		return new ArrayList<String>(Arrays.asList("Radio", "Optical",
-				"RedShift"));
+				"Redshift"));
 	}
 
 }

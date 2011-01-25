@@ -34,7 +34,7 @@ public class DataForm extends BasicForm {
 	// Initial Layout
 	public void initLayout() {
 		setCollapsible(true);
-		nOnPerOff = new GeneralText("nOnPerOff","Number of On per Off");
+		nOnPerOff = new GeneralText("nOnPerOff","Number of Ons per Offs");
 		nOnPerOff.setToolTip("Enter the number of on-source or on frequency per off observations");
 		rSigRef = new GeneralText("rSigRef","Ratio of time On vs Reference");
 		rSigRef.setToolTip("Ratio of observing time spent on-source/on-frequency to that spent on a reference source/frequency");
@@ -59,33 +59,46 @@ public class DataForm extends BasicForm {
 		smoothing.setOrientation(Orientation.VERTICAL);
 		
 		Radio choice = new Radio();
-		choice.setBoxLabel("Velocity Resolution (km/s) in the Rest Frame");
+		choice.setBoxLabel("Velocity Resolution in the Rest Frame");
 		choice.setValueAttribute("velocity_resolution_rest");
 		choice.setName("velocity_resolution_rest");
 		choice.setValue(true);
 		smoothing.add(choice);
 		
 		choice = new Radio();
-		choice.setBoxLabel("Frequency Resolution (MHz) in the Topocentric");
+		choice.setBoxLabel("Frequency Resolution in the Topocentric");
 		choice.setValueAttribute("frequency_resolution_topo");
 		choice.setName("frequency_resolution_topo");
 		smoothing.add(choice);
 		
 		choice = new Radio();
-		choice.setBoxLabel("Frequency Resolution (MHz) in the Rest Frame");
+		choice.setBoxLabel("Frequency Resolution in the Rest Frame");
 		choice.setValueAttribute("frequency_resolution_rest");
 		choice.setName("frequency_resolution_rest");
 		smoothing.add(choice);
 		
-		resolution = new GeneralText("smoothing_resolution", "Desired Resolution");
+		resolution = new GeneralText("smoothing_resolution", "Desired Resolution (km/s)");
 		resolution.setMaxLength(6);
+		
+		smoothing.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent be) {
+				if (smoothing.getValue().getValueAttribute().equals("velocity_resolution_rest")) {
+					resolution.setFieldLabel("Deired Resolution (km/s)");
+				} else {
+					resolution.setFieldLabel("Deired Resolution (MHz)");
+				}
+			}
+			
+		});
 		
 		smoothing_factor_inst = new Label("To improve signal-to-noise you can smooth reference observations to a resolution that is a few times courser than the signal observation.  Select the factor by which you want to smooth the reference observation:");
 				
 		smoothing_factor = new RadioGroup("smoothing_factor");
 		smoothing_factor.setName("smoothing_factor");
 		smoothing_factor.setId("smoothing_factor");
-		smoothing_factor.setLabelSeparator("");
+		smoothing_factor.setFieldLabel("Smoothing Factor");
 		
 		choice = new Radio();
 		choice.setBoxLabel("1");
@@ -126,8 +139,7 @@ public class DataForm extends BasicForm {
 		smoothing_factor_inst.hide();
 		smoothing_factor.hide();
 		smoothingFieldSet.hide();
-//		smoothing.addListener(Events.Change, new HandleSmoothing());
-		
+
 		FormData fd = new FormData(60, 20);
 		
 		//attaching fields
