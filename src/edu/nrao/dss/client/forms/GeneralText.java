@@ -1,4 +1,4 @@
-package edu.nrao.dss.client;
+package edu.nrao.dss.client.forms;
 
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.core.client.GWT;

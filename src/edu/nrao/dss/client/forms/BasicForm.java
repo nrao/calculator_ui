@@ -1,4 +1,4 @@
-package edu.nrao.dss.client;
+package edu.nrao.dss.client.forms;
 
 import java.util.ArrayList;
 
@@ -12,6 +12,9 @@ import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
+
+import edu.nrao.dss.client.data.InputData;
+import edu.nrao.dss.client.data.ResultsData;
 
 public abstract class BasicForm extends FormPanel {
 	private Button update;
@@ -73,6 +76,7 @@ public abstract class BasicForm extends FormPanel {
 		public void componentSelected(ButtonEvent ce) {
 			submit();
 			ResultsData.loadResults();
+			InputData.loadInput();
 		}
 	};
 

@@ -22,6 +22,13 @@ import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import edu.nrao.dss.client.data.DataGrid;
+import edu.nrao.dss.client.data.ResultsData;
+import edu.nrao.dss.client.forms.DataForm;
+import edu.nrao.dss.client.forms.GeneralForm;
+import edu.nrao.dss.client.forms.HardwareForm;
+import edu.nrao.dss.client.forms.SourceForm;
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
@@ -78,7 +85,7 @@ public class Calculator_ui implements EntryPoint {
 		
 		rcp.add(questions, tdLeft);
 		
-		ResultsGrid results = ResultsData.getResults();
+		DataGrid results = ResultsData.getResults();
 		results.setHeight(800);
 		rcp.add(results, tdRight);
 		

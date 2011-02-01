@@ -1,4 +1,4 @@
-package edu.nrao.dss.client;
+package edu.nrao.dss.client.forms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +21,7 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
+
 
 public class SourceForm extends BasicForm {
 	private GeneralText sourceDec, restFreq, sourceVelocity, redshift,

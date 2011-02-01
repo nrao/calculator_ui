@@ -1,4 +1,4 @@
-package edu.nrao.dss.client;
+package edu.nrao.dss.client.forms;
 
 import java.util.ArrayList;
 import java.util.Arrays;

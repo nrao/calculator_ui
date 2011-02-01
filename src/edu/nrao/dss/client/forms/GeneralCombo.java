@@ -1,10 +1,11 @@
-package edu.nrao.dss.client;
+package edu.nrao.dss.client.forms;
 
 import java.util.ArrayList;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
+
 
 public class GeneralCombo extends ComboBox<ComboModel> {
 	private ListStore<ComboModel> comboStore = new ListStore<ComboModel>();
