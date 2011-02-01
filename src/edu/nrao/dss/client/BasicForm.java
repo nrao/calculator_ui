@@ -68,17 +68,11 @@ public abstract class BasicForm extends FormPanel {
 			}
 		}
 	}
-
+	
 	SelectionListener<ButtonEvent> updateTerms = new SelectionListener<ButtonEvent>() {
 		public void componentSelected(ButtonEvent ce) {
 			submit();
-			ResultsData.fetchResults();
-		}
-	};
-
-	SelectionListener<ButtonEvent> getTerms = new SelectionListener<ButtonEvent>() {
-		public void componentSelected(ButtonEvent ce) {
-			ResultsData.fetchResults();
+			ResultsData.loadResults();
 		}
 	};
 

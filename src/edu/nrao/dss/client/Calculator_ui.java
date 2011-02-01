@@ -61,7 +61,7 @@ public class Calculator_ui implements EntryPoint {
 
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
-
+		
 		ContentPanel questions = new ContentPanel();
 		questions.setHeaderVisible(false);
 		questions.setHeading("Questions");
@@ -77,6 +77,10 @@ public class Calculator_ui implements EntryPoint {
 		questions.add(dataForm);
 		
 		rcp.add(questions, tdLeft);
+		
+		ResultsGrid results = ResultsData.getResults();
+		results.setHeight(800);
+		rcp.add(results, tdRight);
 		
 //		HorizontalPanel formControls = new HorizontalPanel();
 //		//formControls.setLayout(new RowLayout());
@@ -101,9 +105,6 @@ public class Calculator_ui implements EntryPoint {
 //		ControlsPanel controls = new ControlsPanel();
 //		right.add(controls);
 //		rcp.add(right, tdRight);
-		ResultsPanel results = new ResultsPanel();
-		results.setHeight(800);
-		rcp.add(results, tdRight);
 
 		RootPanel.get().add(rcp);
 	}
