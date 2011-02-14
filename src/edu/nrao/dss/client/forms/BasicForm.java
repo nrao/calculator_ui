@@ -10,6 +10,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
 
@@ -67,7 +68,15 @@ public abstract class BasicForm extends FormPanel {
 
 		for (BasicForm form : observers) {
 			for (Field fe : this.getFields()) {
-				form.notify(fe.getName(), fe.getRawValue());
+				String name = fe.getName();
+				
+				if (name != null) {
+					if (name.equals("frame")) {
+						form.notify(name, ((RadioGroup) fe).getValue().getValueAttribute());
+					} else {
+						form.notify(name, fe.getRawValue());
+					}
+				}
 			}
 		}
 	}

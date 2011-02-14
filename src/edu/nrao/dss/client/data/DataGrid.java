@@ -21,17 +21,20 @@ import com.google.gwt.http.client.RequestBuilder;
 public class DataGrid extends ContentPanel {
 	
 	private BaseListLoader<BaseListLoadResult<BaseModelData>> loader;
+	private String heading;
 	
 	public DataGrid(String heading, DataType datatype) {
-		initLayout(heading, datatype);
+		this.heading = heading;
+		initLayout(datatype);
 	}
 	
-	private void initLayout(String heading, DataType datatype) {
+	private void initLayout(DataType datatype) {
 		setHeading(heading);
 		setBodyBorder(true);
 		setLayout(new FitLayout());
-		setHeight(700);
+		setAutoHeight(true);
 		setScrollMode(Scroll.AUTOY);
+		setCollapsible(true);
 		
 		String rootUrl = "/calculator/get_results";
 				
@@ -43,25 +46,40 @@ public class DataGrid extends ContentPanel {
 		ListStore<BaseModelData> store = new ListStore<BaseModelData>(loader);
 		
 		ColumnModel cm           = initColumnModel();
-	    Grid<BaseModelData> grid = new Grid<BaseModelData>(store, cm);
+	    final Grid<BaseModelData> grid = new Grid<BaseModelData>(store, cm);
 	    grid.setAutoHeight(true);
 	    
 		add(grid);
 		grid.setBorders(true);
-		load();
 	}
 	
 	private ColumnModel initColumnModel() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-	    ColumnConfig column = new ColumnConfig("term", "Variable", 200);
-	    configs.add(column);
+//	    ColumnConfig column = new ColumnConfig("term", "Variable", 200);
+//	    configs.add(column);
 
-	    column = new ColumnConfig("value", "Value", 200);
+	    String termHeading;
+	    if (heading.equals("Results")) {
+	    	termHeading = "Term";
+	    } else {
+	    	termHeading = "Field";
+	    }
+	    
+	    ColumnConfig column = new ColumnConfig("label", termHeading, 225);
 	    configs.add(column);
 	    
-	    column = new ColumnConfig("units", "Units", 100);
+//	    column = new ColumnConfig("value", "Value", 200);
+//	    configs.add(column);
+	    
+	    column = new ColumnConfig("display", "Value", 300);
 	    configs.add(column);
+	    
+//	    column = new ColumnConfig("units", "Units", 100);
+//	    configs.add(column);
+	    
+//	    column = new ColumnConfig("equation", "Equation", 100);
+//	    configs.add(column);
 	    
 	    return new ColumnModel(configs);
 	}

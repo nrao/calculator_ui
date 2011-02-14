@@ -29,7 +29,6 @@ public class SourceForm extends BasicForm {
 	private GeneralCombo doppler;
 	private RadioGroup galactic, frame;
 	private Slider diameter;
-	private String validatedSourceDec;
 	private LabelField diameter_display;
 	private double c      = 3e10; // speed of light in cm/s
 	
@@ -119,10 +118,34 @@ public class SourceForm extends BasicForm {
 		
 		final SliderField sf = new SliderField(diameter);
 		sf.setLabelSeparator("");
-		sf.setName("source_diameter");
-		sf.setId("source_diameter");
+		sf.setName("source_diameter_slider");
+		sf.setId("source_diameter_slider");
 		
 		rightAscension = new GeneralText("right_ascension", "Approx Right Ascension (HH:MM)");
+		rightAscension.setMessageTarget("side");
+		rightAscension.setValidator(new Validator () {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (value.isEmpty() || value.equals("-")) {
+					return null;
+				}
+				
+				String[] values = value.split(":");
+				if (values.length < 2) {
+					return null;
+				}
+				
+				if (Float.valueOf(values[1]) >= 60.0) {
+					return "Minutes cannot be greater than or equal to 60.";
+				} else if (Float.valueOf(values[0]) < 0.0){
+					return "Right Ascension cannot be negative.";
+				}
+				return null;
+			}
+			
+		});
+		
 		tBG            = new GeneralText("estimated_continuum", "Contribution (K)");
 		tBG.setToolTip("Enter contribution of source to continuum level in units of K.");
 		tBG.setValue("0");
@@ -145,8 +168,9 @@ public class SourceForm extends BasicForm {
 				float dec = (float) (Float.valueOf(values[0]).floatValue() + Float.valueOf(values[1]).floatValue() / 60.0);
 				if (dec + min_el <= -51.57) {
 					return "Declination " + value + "does not achieve the desired minimum elevation for the chosen receiver and frequency.";
+				} else if (Float.valueOf(values[1]) >= 60.0) {
+					return "Minutes cannot be greater than or equal to 60.";
 				}
-				validatedSourceDec = "" + dec;
 				return null;
 			}
 			
@@ -204,6 +228,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 		doppler.addListener(Events.Select, new HandleDoppler());
@@ -212,6 +237,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 		galactic.addListener(Events.Change, new HandleGalactic());
@@ -220,6 +246,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 		topoFreq.addListener(Events.Change, new Listener<FieldEvent> () {
@@ -227,6 +254,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 		redshift.addListener(Events.Change, new Listener<FieldEvent> () {
@@ -234,6 +262,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 		sourceVelocity.addListener(Events.Change, new Listener<FieldEvent> () {
@@ -241,6 +270,7 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent se) {
 				calcDiameter();
+				notifyAllForms();
 			}
 		});
 	}
@@ -252,6 +282,7 @@ public class SourceForm extends BasicForm {
 				double d = 0.1 * diameter.getValue() * calcFWHM(Double.valueOf(topoFreq.getValue()) * 1e6);
 				diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
 			} else {
+				//  TODO: Refactor to use Functions.velocity2Frequency()
 				double rfreq = Double.valueOf(restFreq.getValue()) * 1e6;
 				double tfreq = 0;
 				if (doppler.getSelected().equals("Redshift")) {
@@ -263,6 +294,7 @@ public class SourceForm extends BasicForm {
 				}
 				double d = 0.1 * diameter.getValue() * calcFWHM(tfreq);
 				diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
+				topoFreq.setValue("" + tfreq * 1e-6);
 			}
 		}
 	}
@@ -270,19 +302,12 @@ public class SourceForm extends BasicForm {
 	private double calcFWHM(double freq) {
 		double TeDB   = 13;
 		double lambda = c / freq;
-		return (1.02 + 0.0135 * TeDB) * 3437.7 * (lambda / 20000);
+		int dish_radius = 50;
+		return (1.02 + 0.0135 * TeDB) * 3437.7 * (lambda / (2 * dish_radius * 100));
 	}
 	
 	public void validate() {
 
-	}
-	
-	public void submit() {
-		// These aren't the droids your looking for.
-		String orgValue = sourceDec.getValue();
-		sourceDec.setValue(validatedSourceDec);
-		super.submit();
-		sourceDec.setValue(orgValue);
 	}
 
 	public void notify(String name, String value) {
@@ -321,7 +346,22 @@ public class SourceForm extends BasicForm {
 				topoFreq.setValue("" + freq_mid);
 			}
 		}
+		notifyAllForms();
 
+	}
+	
+	private void updateDopplerFields() {
+		if (doppler.getValue().getName("name") == "Redshift") {
+			redshift.show();
+			redshift.setAllowBlank(false);
+			sourceVelocity.hide();
+			sourceVelocity.setAllowBlank(true);
+		} else {
+			redshift.hide();
+			redshift.setAllowBlank(true);
+			sourceVelocity.show();
+			sourceVelocity.setAllowBlank(false);
+		}
 	}
 
 	class HandleFrame implements Listener<FieldEvent> {
@@ -332,10 +372,7 @@ public class SourceForm extends BasicForm {
 				restFreq.show();
 				restFreq.setAllowBlank(false);
 				doppler.show();
-				sourceVelocity.show();
-				sourceVelocity.setAllowBlank(false);
-				redshift.hide();
-				redshift.setAllowBlank(true);
+				updateDopplerFields();
 			} else {
 				topoFreq.show();
 				topoFreq.setAllowBlank(false);
@@ -347,22 +384,14 @@ public class SourceForm extends BasicForm {
 				redshift.hide();
 				redshift.setAllowBlank(true);
 			}
+			notifyAllForms();
 		}
 	}
 
 	class HandleDoppler implements Listener<FieldEvent> {
 		public void handleEvent(FieldEvent fe) {
-			if (doppler.getValue().getName("name") == "Redshift") {
-				redshift.show();
-				redshift.setAllowBlank(false);
-				sourceVelocity.hide();
-				sourceVelocity.setAllowBlank(true);
-			} else {
-				redshift.hide();
-				redshift.setAllowBlank(true);
-				sourceVelocity.show();
-				sourceVelocity.setAllowBlank(false);
-			}
+			updateDopplerFields();
+			notifyAllForms();
 		}
 	}
 
@@ -373,12 +402,14 @@ public class SourceForm extends BasicForm {
 				rightAscension.setAllowBlank(false);
 				tBG.hide();
 				tBG.setAllowBlank(true);
+				tBG.setValue("0");
 			} else if (galactic.getValue().getValueAttribute().equals("estimated")) {
 				rightAscension.hide();
 				rightAscension.setAllowBlank(true);
 				tBG.show();
 				tBG.setAllowBlank(false);
 			} else {
+				tBG.setValue("0");
 				rightAscension.hide();
 				rightAscension.setAllowBlank(true);
 				tBG.hide();

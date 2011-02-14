@@ -23,6 +23,7 @@ import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import edu.nrao.dss.client.data.DataGrid;
+import edu.nrao.dss.client.data.InputData;
 import edu.nrao.dss.client.data.ResultsData;
 import edu.nrao.dss.client.forms.DataForm;
 import edu.nrao.dss.client.forms.GeneralForm;
@@ -60,14 +61,9 @@ public class Calculator_ui implements EntryPoint {
 		SourceForm sourceForm     = new SourceForm();
 		DataForm dataForm         = new DataForm();
 		
-//		ArrayList<BasicForm> forms = new ArrayList<BasicForm>();
-//		forms.add(generalForm);
-//		forms.add(hardwareForm);
-//		forms.add(sourceForm);
-//		forms.add(dataForm);
-
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
+		sourceForm.addObserver(dataForm);
 		
 		ContentPanel questions = new ContentPanel();
 		questions.setHeaderVisible(false);
@@ -85,34 +81,19 @@ public class Calculator_ui implements EntryPoint {
 		
 		rcp.add(questions, tdLeft);
 		
-		DataGrid results = ResultsData.getResults();
+		ContentPanel results = new ContentPanel();
+		results.setHeaderVisible(false);
+		results.setLayout(new RowLayout());
+		results.setScrollMode(Scroll.AUTO);
 		results.setHeight(800);
+		results.setBorders(true);
+		results.setAutoWidth(true);
+		
+		results.add(ResultsData.getResultsGrid());
+		results.add(InputData.getInputGrid());
+		
 		rcp.add(results, tdRight);
 		
-//		HorizontalPanel formControls = new HorizontalPanel();
-//		//formControls.setLayout(new RowLayout());
-//		formControls.setBorders(false);
-//		
-//		TableData fctd            = new TableData();
-//		fctd.setHorizontalAlign(HorizontalAlignment.CENTER);
-//		formControls.add(new CalculatorButton(forms), fctd);
-//		
-//		ContentPanel left = new ContentPanel();
-//		left.setHeading("Questions");
-//		left.add(formControls);
-//		left.add(questions);
-//		
-//		rcp.add(left, tdLeft);
-
-//		ContentPanel right = new ContentPanel();
-//		right.setHeaderVisible(false);
-//		right.setHeight(700);
-//		right.setFrame(true);
-//		right.add(new ResultsPanel());
-//		ControlsPanel controls = new ControlsPanel();
-//		right.add(controls);
-//		rcp.add(right, tdRight);
-
 		RootPanel.get().add(rcp);
 	}
 }

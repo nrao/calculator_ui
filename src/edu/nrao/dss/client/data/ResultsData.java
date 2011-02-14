@@ -1,17 +1,19 @@
 package edu.nrao.dss.client.data;
 
 
+
 public class ResultsData {
 	
-	private static DataGrid results = 
+	private static DataGrid resultsGrid = 
 		new DataGrid("Results", new DataType("results", "total_results"));
 	
-	public static DataGrid getResults() {
-		return results;
+	public static DataGrid getResultsGrid() {
+		return resultsGrid;
 	}
 	
+	
 	public static void loadResults() {
-		results.load();
+		resultsGrid.load();
 	}
 
 }

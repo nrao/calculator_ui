@@ -11,6 +11,9 @@ public class DataType extends ModelType{
 		addField("term");
 		addField("value");
 		addField("units");
+		addField("equation");
+		addField("label");
+		addField("display");
 	}
 
 }
