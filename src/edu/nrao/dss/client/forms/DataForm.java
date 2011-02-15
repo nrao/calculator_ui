@@ -110,7 +110,7 @@ public class DataForm extends BasicForm {
 		
 		resolution = new GeneralText("smoothing_resolution", "Desired Resolution (km/s)");
 		resolution.setMaxLength(6);
-		resolution.addListener(Events.Change, new Listener<FieldEvent> () {
+		resolution.addListener(Events.Valid, new Listener<FieldEvent> () {
 
 			@Override
 			public void handleEvent(FieldEvent be) {
@@ -175,7 +175,7 @@ public class DataForm extends BasicForm {
 		bw.setId("bw");
 		bw.setName("bw");
 		bw.setLabelSeparator(":");
-		//bw.hide();
+		bw.hide();
 		
 		//initial state
 		rSigRef.hide();
