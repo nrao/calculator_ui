@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 
 public class Functions {
 	
-	private static double c      = 3e8; // speed of light in m/s
+	private static double c      = 2.99792458e8; // speed of light in m/s
 	
 	public static double velocity2Frequency(String doppler, double rfreq, double velocity, double redshift) {
 		double tfreq = 0;

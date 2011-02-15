@@ -27,10 +27,10 @@ public class DataForm extends BasicForm {
 	private CheckBox averagePol, differenceSignal;
 	private RadioGroup smoothing, smoothing_factor;
 	private Radio vel_res_rest_frame, freq_res_topo, freq_res_rest_frame, vel_res_topo_frame, freq_res_topo_frame;
-	private Label smoothing_factor_inst;
-	private FieldSet smoothingFieldSet;
-	private Float restFreq, topoFreq, srcVelocity, redshift;
-	private String doppler, frame;
+	private Label smoothing_factor_inst, rSigRefInst, nAverageRefInst;
+	private FieldSet smoothingFieldSet, sigRefSet;
+	private Float restFreq, topoFreq, srcVelocity, redshift, bandwidth;
+	private String doppler, frame, mode;
 
 	public DataForm() {
 		super("Data Reduction");
@@ -40,8 +40,9 @@ public class DataForm extends BasicForm {
 	public void initLayout() {
 		setCollapsible(true);
 		rSigRef = new GeneralText("r_sig_ref","Ratio of time On vs Reference");
-		rSigRef.setToolTip("Ratio of observing time spent on-source/on-frequency to that spent on a reference source/frequency");
+		rSigRef.setLabelStyle("display:none");
 		rSigRef.setValue("1");
+		rSigRefInst = new Label("Ratio of observing time spent on-source/on-frequency to that spent on a reference position/reference frequency.");
 		
 		//nOverlap = new GeneralCombo("nOverlap","Enter number of spectral windows centered",  new ArrayList<String>(Arrays.asList("1","2")));
 		averagePol = new CheckBox();
@@ -50,6 +51,7 @@ public class DataForm extends BasicForm {
 		averagePol.setValueAttribute("true");
 		averagePol.setBoxLabel("Average Orthognal Polarizations");
 		averagePol.setLabelSeparator("");
+		averagePol.setValue(true);
 		differenceSignal =  new CheckBox();
 		differenceSignal.setId("diff_signal");
 		differenceSignal.setName("diff_signal");
@@ -58,8 +60,9 @@ public class DataForm extends BasicForm {
 		differenceSignal.setLabelSeparator("");
 		differenceSignal.setValue(true);
 		nAverageRef = new GeneralText("no_avg_ref","Number of Reference Observations");
-		nAverageRef.setToolTip("In data reduction you have the option to average multiple reference observations in order to improve the noise. Enter number of reference observations that will be averaged together.");
 		nAverageRef.setValue("1");
+		nAverageRef.setLabelStyle("display:none");
+		nAverageRefInst = new Label("In data reduction you have the option to average multiple reference observations in order to improve the noise. Enter number of reference observations that will be averaged together.");
 		
 		smoothing = new RadioGroup("smoothing");
 		smoothing.setFieldLabel("Smooth On-source Data to a Desired");
@@ -170,6 +173,11 @@ public class DataForm extends BasicForm {
 		layout.setLabelWidth(200);  
 		smoothingFieldSet.setLayout(layout);
 		
+		sigRefSet = new FieldSet();
+		FormLayout layout2 = new FormLayout();  
+		layout2.setLabelWidth(200);  
+		sigRefSet.setLayout(layout2);
+		
 		bw = new GeneralText("bw", "Resolution (MHz)");
 		//bw.setFieldLabel("Resolution (MHz)");
 		bw.setId("bw");
@@ -179,8 +187,10 @@ public class DataForm extends BasicForm {
 		
 		//initial state
 		rSigRef.hide();
+		rSigRefInst.hide();
 		smoothing.hide();
 		resolution.hide();
+		resolution.setAllowBlank(true);
 		smoothing_factor_inst.hide();
 		smoothing_factor.hide();
 		smoothingFieldSet.hide();
@@ -188,8 +198,11 @@ public class DataForm extends BasicForm {
 		FormData fd = new FormData(60, 20);
 		
 		//attaching fields
-		add(rSigRef, fd);
-		add(nAverageRef, fd);
+		sigRefSet.add(rSigRefInst);
+		sigRefSet.add(rSigRef, fd);
+		sigRefSet.add(nAverageRefInst);
+		sigRefSet.add(nAverageRef, fd);
+		add(sigRefSet);
 		//add(nOverlap);
 		add(averagePol);
 		add(differenceSignal);
@@ -225,7 +238,11 @@ public class DataForm extends BasicForm {
 		if (resolution.getValue() == null || resolution.getValue().equals("")) {
 			return;
 		}
-		double c = 3.0e5;
+		if (!mode.equals("Spectral Line") & bandwidth != null){
+			bw.setValue("" + bandwidth);
+			return;
+		}
+		double c = 2.99792458e5;
 		String smoothing_option = smoothing.getValue().getValueAttribute();
 		if (smoothing_option.equals("frequency_resolution_topo")) {
 			bw.setValue(resolution.getValue());
@@ -262,20 +279,26 @@ public class DataForm extends BasicForm {
 		if (name.equals("switching")) {
 			if (value.equals("Total Power")) {
 				rSigRef.hide();
+				rSigRefInst.hide();
 			} else {
 				rSigRef.show();
+				rSigRefInst.show();
 			}
 		
 		} else if (name.equals("mode")) {
+			mode = value;
 			if (value.equals("Spectral Line")) {
 				smoothing.show();
 				resolution.show();
+				resolution.setAllowBlank(false);
 				smoothing_factor_inst.show();
 				smoothing_factor.show();
 				smoothingFieldSet.show();
 			} else {
 				smoothing.hide();
 				resolution.hide();
+				resolution.setAllowBlank(true);
+				resolution.setValue("0");
 				smoothing_factor_inst.hide();
 				smoothing_factor.hide();
 				smoothingFieldSet.hide();
@@ -293,6 +316,8 @@ public class DataForm extends BasicForm {
 			} else {
 				averagePol.setValue(false);				
 			}
+		} else if (name.equals("bandwidth") & !value.equals("NOTHING")) {
+			bandwidth = Float.valueOf(value);
 		}
 		
 		if (name.equals("rest_freq")) {

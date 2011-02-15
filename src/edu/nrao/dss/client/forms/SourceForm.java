@@ -30,7 +30,7 @@ public class SourceForm extends BasicForm {
 	private RadioGroup galactic, frame;
 	private Slider diameter;
 	private LabelField diameter_display;
-	private double c      = 3e10; // speed of light in cm/s
+	private double c      = 2.99792458e10; // speed of light in cm/s
 	
 	
 	public SourceForm() {
