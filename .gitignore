@@ -11,12 +11,7 @@
 .metadata
 .settings
 
-*.launch
 
-bin/
-client/
-dist/
-tomcat/
 www/
 www-test/
 war/calculator_ui

@@ -26,7 +26,7 @@ public class HardwareForm extends BasicForm {
 		beamCombo         = new GeneralCombo("beams", "Beams");
 		polarizationCombo = new GeneralCombo("polarization", "Polarization");
 		bandwidthCombo    = new GeneralCombo("bandwidth", "BandWidth (MHz)");
-		windowCombo       = new GeneralCombo("windows", "Number of Spectrtal Windows");
+		windowCombo       = new GeneralCombo("windows", "Number of Spectral Windows");
 		switchingCombo    = new GeneralCombo("switching", "Switching Mode");
 
 
