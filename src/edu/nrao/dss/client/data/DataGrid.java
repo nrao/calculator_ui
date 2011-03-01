@@ -69,11 +69,11 @@ public class DataGrid extends ContentPanel {
 	    ColumnConfig column = new ColumnConfig("label", termHeading, 225);
 	    configs.add(column);
 	    
-//	    column = new ColumnConfig("value", "Value", 200);
-//	    configs.add(column);
-	    
-	    column = new ColumnConfig("display", "Value", 300);
+	    column = new ColumnConfig("value", "Value", 200);
 	    configs.add(column);
+	    
+//	    column = new ColumnConfig("display", "Value", 300);
+//	    configs.add(column);
 	    
 //	    column = new ColumnConfig("units", "Units", 100);
 //	    configs.add(column);

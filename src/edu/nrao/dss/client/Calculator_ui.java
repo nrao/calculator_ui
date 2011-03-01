@@ -3,6 +3,8 @@ package edu.nrao.dss.client;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.RequestBuilder;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;
@@ -73,6 +75,7 @@ public class Calculator_ui implements EntryPoint {
 		questions.setHeight(800);
 		questions.setBorders(true);
 		questions.setAutoWidth(true);
+		//questions.setWidth(550);
 		
 		questions.add(generalForm);
 		questions.add(hardwareForm);
@@ -81,18 +84,26 @@ public class Calculator_ui implements EntryPoint {
 		
 		rcp.add(questions, tdLeft);
 		
-		ContentPanel results = new ContentPanel();
-		results.setHeaderVisible(false);
-		results.setLayout(new RowLayout());
-		results.setScrollMode(Scroll.AUTO);
+		TabPanel results = new TabPanel();
 		results.setHeight(800);
-		results.setBorders(true);
 		results.setAutoWidth(true);
+		results.setWidth(600);
 		
-		results.add(ResultsData.getResultsGrid());
-		results.add(InputData.getInputGrid());
+		TabItem resultsFormatted = new TabItem("Results");  
+		resultsFormatted.setScrollMode(Scroll.AUTO);  
+		resultsFormatted.addStyleName("pad-text");
+		resultsFormatted.setAutoLoad(ResultsData.getResultsRB());
+		results.add(resultsFormatted);
 		
-		rcp.add(results, tdRight);
+		TabItem resultsGrid = new TabItem("Result Grids");
+		resultsGrid.setLayout(new RowLayout());
+		resultsGrid.setScrollMode(Scroll.AUTO);
+		
+		resultsGrid.add(ResultsData.getResultsGrid());
+		resultsGrid.add(InputData.getInputGrid());
+		results.add(resultsGrid);
+		
+		rcp.add(results);
 		
 		RootPanel.get().add(rcp);
 	}
