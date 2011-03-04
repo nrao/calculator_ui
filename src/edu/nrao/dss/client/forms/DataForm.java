@@ -10,10 +10,12 @@ import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
+import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FieldSet;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.core.client.GWT;
@@ -113,6 +115,19 @@ public class DataForm extends BasicForm {
 		
 		resolution = new GeneralText("smoothing_resolution", "Desired Resolution (km/s)");
 		resolution.setMaxLength(6);
+		resolution.setValidator(new Validator () {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (value.isEmpty() || value.equals("-")) {
+					return null;
+				}
+				if (Float.valueOf(value) == 0){
+					return "Resolution cannot be zero.";
+				}
+				return null;
+			}
+		});
 		resolution.addListener(Events.Valid, new Listener<FieldEvent> () {
 
 			@Override
@@ -298,7 +313,7 @@ public class DataForm extends BasicForm {
 				smoothing.hide();
 				resolution.hide();
 				resolution.setAllowBlank(true);
-				resolution.setValue("0");
+				resolution.setValue("1");
 				smoothing_factor_inst.hide();
 				smoothing_factor.hide();
 				smoothingFieldSet.hide();
