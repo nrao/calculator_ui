@@ -17,5 +17,9 @@ public class Functions {
 		}
 		return tfreq;
 	}
+	
+	public static double getC() {
+		return c;
+	}
 
 }
