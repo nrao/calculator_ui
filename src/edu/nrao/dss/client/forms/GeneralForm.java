@@ -53,6 +53,7 @@ public class GeneralForm extends BasicForm {
 		time = new GeneralText("time", "Observing Time (in sec)");
 		time.setMaxLength(6);
 		time.setAllowBlank(true);
+		time.setValue("1");
 		time.hide();
 		
 		// Unit choices
@@ -127,11 +128,13 @@ public class GeneralForm extends BasicForm {
 			if (conversion.getValue().getValueAttribute().equals("Time to Sensitivity")) {
 				sensitivity.hide();
 				sensitivity.setAllowBlank(true);
+				sensitivity.setValue("1");
 				time.show();
 				time.setAllowBlank(false);
 			} else {
 				time.hide();
 				time.setAllowBlank(true);
+				time.setValue("1");
 				sensitivity.show();
 				sensitivity.setAllowBlank(false);
 			}
