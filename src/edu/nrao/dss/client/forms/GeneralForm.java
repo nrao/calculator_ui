@@ -6,17 +6,20 @@ import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.core.client.GWT;
 
 public class GeneralForm extends BasicForm {
 	private RadioGroup units, conversion, semester;
 	private GeneralText sensitivity, time;
+	private double seconds;
 
 	public GeneralForm() {
 		super("General Information");
@@ -50,11 +53,34 @@ public class GeneralForm extends BasicForm {
 		sensitivity.setMaxLength(6);
 		
 		// Desired time
-		time = new GeneralText("time", "Observing Time (in sec)");
-		time.setMaxLength(6);
+		time = new GeneralText("time", "Observing Time (H:M:S)");
+		time.setToolTip("Enter time in HH:MM:SS.SS, MM:SS.SS, or SS.SS");
+		//time.setMaxLength(6);
 		time.setAllowBlank(true);
 		time.setValue("1");
 		time.hide();
+		time.setValidator(new Validator() {
+
+			@Override
+			public String validate(Field<?> field, String value) {
+				seconds = 0.0;
+				String[] values = value.split(":");
+				try {
+					if (values.length == 3) {
+						seconds = Double.valueOf(values[0]) * 3600 + Double.valueOf(values[1]) * 60 + Double.valueOf(values[2]);
+					} else if (values.length == 2) {
+						seconds = Double.valueOf(values[0]) * 60 + Double.valueOf(values[1]);
+					} else {
+						seconds = Double.valueOf(value);
+					}
+				} catch (Exception e) {
+					return "Enter time in HH:MM:SS.SS, MM:SS.SS, or SS.SS";
+				}
+				
+				return null;
+			}
+			
+		});
 		
 		// Unit choices
 		units = new RadioGroup("units");
@@ -118,7 +144,7 @@ public class GeneralForm extends BasicForm {
 		add(conversion);
 		add(units);
 		add(sensitivity, fd);
-		add(time, fd);
+		add(time, new FormData(60, 20));
 		add(semester);
 
 	}
@@ -141,6 +167,13 @@ public class GeneralForm extends BasicForm {
 		}
 	}
 
+	public void submit() {
+		String t = time.getValue();
+		time.setValue("" + seconds);
+		super.submit();
+		time.setValue(t);
+	}
+	
 	@Override
 	public void validate() {
 		// TODO Auto-generated method stub

@@ -142,9 +142,9 @@ public class DataForm extends BasicForm {
 			@Override
 			public void handleEvent(FieldEvent be) {
 				if (smoothing.getValue().getValueAttribute().equals("velocity_resolution_rest")) {
-					resolution.setFieldLabel("Deired Resolution (km/s)");
+					resolution.setFieldLabel("Desired Resolution (km/s)");
 				} else {
-					resolution.setFieldLabel("Deired Resolution (MHz)");
+					resolution.setFieldLabel("Desired Resolution (MHz)");
 				}
 			}
 			

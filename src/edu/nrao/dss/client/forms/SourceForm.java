@@ -123,6 +123,7 @@ public class SourceForm extends BasicForm {
 		
 		rightAscension = new GeneralText("right_ascension", "Approx Right Ascension (HH:MM)");
 		rightAscension.setMessageTarget("side");
+		rightAscension.setValue("0");
 		rightAscension.setValidator(new Validator () {
 
 			@Override
