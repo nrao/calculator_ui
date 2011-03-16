@@ -53,7 +53,7 @@ public class GeneralForm extends BasicForm {
 		sensitivity.setMaxLength(6);
 		
 		// Desired time
-		time = new GeneralText("time", "Observing Time (H:M:S)");
+		time = new GeneralText("time", "Observing Time (H:M:S or SS.SS)");
 		time.setToolTip("Enter time in HH:MM:SS.SS, MM:SS.SS, or SS.SS");
 		//time.setMaxLength(6);
 		time.setAllowBlank(true);
@@ -144,7 +144,7 @@ public class GeneralForm extends BasicForm {
 		add(conversion);
 		add(units);
 		add(sensitivity, fd);
-		add(time, new FormData(60, 20));
+		add(time, new FormData(70, 20));
 		add(semester);
 
 	}
