@@ -7,6 +7,7 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.Label;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 
@@ -134,7 +135,6 @@ public class HardwareForm extends BasicForm {
 				for (int x = 0; x < values.size(); x++) {
 					options.add(values.get(x).toString());
 				}
-				getCombo(key).reset();
 				getCombo(key).setComboStore(options);
 			}
 		}

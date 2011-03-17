@@ -344,22 +344,24 @@ public class DataForm extends BasicForm {
 		} else if (name.equals("source_velocity")) {
 			srcVelocity = Float.valueOf(value);
 		} else if (name.equals("frame")) {
-			frame = value;
-			if (value.equals("Topocentric Frame")) {
-				vel_res_topo_frame.show();
-				vel_res_topo_frame.setValue(true);
-				freq_res_topo_frame.show();
-				vel_res_rest_frame.hide();
-				freq_res_topo.hide();
-				freq_res_rest_frame.hide();
-			} else {
-				vel_res_topo_frame.hide();
-				freq_res_topo_frame.hide();
-				vel_res_rest_frame.show();
-				vel_res_rest_frame.setValue(true);
-				freq_res_topo.show();
-				freq_res_rest_frame.show();
-			}
+			if(!value.equals(frame)) {
+				if (value.equals("Topocentric Frame")) {
+					vel_res_topo_frame.show();
+					vel_res_topo_frame.setValue(true);
+					freq_res_topo_frame.show();
+					vel_res_rest_frame.hide();
+					freq_res_topo.hide();
+					freq_res_rest_frame.hide();
+				} else {
+					vel_res_topo_frame.hide();
+					freq_res_topo_frame.hide();
+					vel_res_rest_frame.show();
+					vel_res_rest_frame.setValue(true);
+					freq_res_topo.show();
+					freq_res_rest_frame.show();
+				}
+				frame = value;
+			}			
 		}else if (name.equals("doppler")) {
 			doppler = value;
 		}

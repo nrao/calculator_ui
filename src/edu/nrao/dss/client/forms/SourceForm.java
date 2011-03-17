@@ -31,6 +31,7 @@ public class SourceForm extends BasicForm {
 	private Slider diameter;
 	private LabelField diameter_display;
 	private double c      = 2.99792458e10; // speed of light in cm/s
+	private String rx;
 	
 	
 	public SourceForm() {
@@ -339,13 +340,15 @@ public class SourceForm extends BasicForm {
 			}
 
 		} else if (name.equals("receiver")) {
-			if (value.contains("(")) {
+			
+			if (value.contains("(") && !value.equals(rx)) {
 				float freq_low = Float.valueOf(value.substring(value.indexOf("(") + 1, value.indexOf("-") - 1)).floatValue();
 				float freq_hi  = Float.valueOf(value.substring(value.indexOf("-") + 2, value.indexOf("G") - 1)).floatValue();
 				float freq_mid = (freq_low + (freq_hi - freq_low) / 2) * 1000;
 				restFreq.setValue("" + freq_mid);
 				topoFreq.setValue("" + freq_mid);
 			}
+			rx = value;
 		}
 		notifyAllForms();
 

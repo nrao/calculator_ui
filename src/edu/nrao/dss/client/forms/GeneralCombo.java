@@ -90,16 +90,19 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 		}
 	}
 
-	public void setComboStore(ArrayList<String> array) {
+	public void setComboStore(ArrayList<String> options) {
+		String value = getRawValue();
+		reset();
+
 		this.getStore().removeAll();
-		for (String key : array) {
+		for (String key : options) {
 			key = key.replace("\"", "");
 			ComboModel option = new ComboModel(key);
 			this.getStore().add(option);
 		}
 		ComboModel newSelection = this.getStore().findModel("name",
-				this.getSelected());
-
+				value);
+		
 		// if the currently selected is in new store select it else select first
 		if (newSelection == null) {
 			this.setValue(this.getStore().getAt(0));
@@ -116,14 +119,17 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 			this.enable();
 			// this.setVisible(true);
 		}
-		getInputEl().setStyleAttribute("background-color", "#C11000");
 		
-		Timer timer = new Timer() {
-			public void run() {
-				getInputEl().setStyleAttribute("background-color", "white");
-			}
-		};
-		timer.schedule(2000);
+		if (newSelection == null) {
+			getInputEl().setStyleAttribute("background-color", "#C11000");
+			
+			Timer timer = new Timer() {
+				public void run() {
+					getInputEl().setStyleAttribute("background-color", "white");
+				}
+			};
+			timer.schedule(2000);
+		}
 	}
 
 }
