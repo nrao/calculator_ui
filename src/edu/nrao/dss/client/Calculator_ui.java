@@ -48,7 +48,9 @@ public class Calculator_ui implements EntryPoint {
 		ContentPanel rcp = new ContentPanel();
 		rcp.setFrame(true);
 		rcp.setHeading("Sensitivity Calculator");
-		rcp.setLayout(new TableLayout(2));
+		TableLayout tableLayout = new TableLayout(2);
+		tableLayout.setCellVerticalAlign(VerticalAlignment.TOP);
+		rcp.setLayout(tableLayout);
 		
 		TableData tdLeft = new TableData();
 		tdLeft.setVerticalAlign(VerticalAlignment.TOP);
@@ -71,11 +73,12 @@ public class Calculator_ui implements EntryPoint {
 		questions.setHeaderVisible(false);
 		questions.setHeading("Questions");
 		questions.setLayout(new RowLayout());
-		questions.setScrollMode(Scroll.AUTO);
+		questions.setScrollMode(Scroll.AUTOY);
 		questions.setHeight(800);
+		//questions.setAutoHeight(true);
 		questions.setBorders(true);
-		questions.setAutoWidth(true);
-		//questions.setWidth(550);
+		//questions.setAutoWidth(true);
+		questions.setWidth(550);
 		
 		questions.add(generalForm);
 		questions.add(hardwareForm);
@@ -85,8 +88,10 @@ public class Calculator_ui implements EntryPoint {
 		rcp.add(questions, tdLeft);
 		
 		TabPanel results = new TabPanel();
+		results.setLayoutData(new RowLayout());
 		results.setHeight(800);
-		results.setAutoWidth(true);
+		//results.setAutoHeight(true);
+		//results.setAutoWidth(true);
 		results.setWidth(600);
 		
 		TabItem resultsFormatted = new TabItem("Results");  
