@@ -9,12 +9,15 @@ import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.VerticalAlignment;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.ColumnData;
 import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
@@ -60,10 +63,10 @@ public class Calculator_ui implements EntryPoint {
 		tdRight.setVerticalAlign(VerticalAlignment.TOP);
 		tdRight.setWidth("550");
 		
-		GeneralForm generalForm   = new GeneralForm();
-		HardwareForm hardwareForm = new HardwareForm();
-		SourceForm sourceForm     = new SourceForm();
-		DataForm dataForm         = new DataForm();
+		final GeneralForm generalForm   = new GeneralForm();
+		final HardwareForm hardwareForm = new HardwareForm();
+		final SourceForm sourceForm     = new SourceForm();
+		final DataForm dataForm         = new DataForm();
 		
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
@@ -74,7 +77,7 @@ public class Calculator_ui implements EntryPoint {
 		questions.setHeading("Questions");
 		questions.setLayout(new RowLayout());
 		questions.setScrollMode(Scroll.AUTOY);
-		questions.setHeight(800);
+		questions.setHeight(860);
 		//questions.setAutoHeight(true);
 		questions.setBorders(true);
 		//questions.setAutoWidth(true);
@@ -86,6 +89,40 @@ public class Calculator_ui implements EntryPoint {
 		questions.add(dataForm);
 		
 		rcp.add(questions, tdLeft);
+		
+		ContentPanel right = new ContentPanel();
+		//right.setHeaderVisible(false);
+		right.setHeading("Controls");
+		right.setLayout(new TableLayout());
+		
+		Button update = new Button("Update Results");
+		update.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				if (generalForm.isValid()) {
+				    generalForm.submit();
+				}
+				if (hardwareForm.isValid()) {
+					hardwareForm.submit();
+				}
+				if (sourceForm.isValid()) {
+					sourceForm.submit();
+				}
+				if (dataForm.isValid()) {
+					dataForm.submit();
+				}
+				ResultsData.loadResults();
+				InputData.loadInput();
+				
+			}
+			
+		});
+		TableData td = new TableData();
+		td.setHorizontalAlign(HorizontalAlignment.CENTER);
+		td.setMargin(20);
+		td.setPadding(10);
+		right.add(update, td);
 		
 		TabPanel results = new TabPanel();
 		results.setLayoutData(new RowLayout());
@@ -108,7 +145,8 @@ public class Calculator_ui implements EntryPoint {
 		resultsGrid.add(InputData.getInputGrid());
 		results.add(resultsGrid);
 		
-		rcp.add(results);
+		right.add(results);
+		rcp.add(right);
 		
 		RootPanel.get().add(rcp);
 	}

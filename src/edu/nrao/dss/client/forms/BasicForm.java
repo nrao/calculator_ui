@@ -18,7 +18,6 @@ import edu.nrao.dss.client.data.InputData;
 import edu.nrao.dss.client.data.ResultsData;
 
 public abstract class BasicForm extends FormPanel {
-	private Button update;
 	public ArrayList<BasicForm> observers = new ArrayList<BasicForm>();
 	FormButtonBinding saveBinding = new FormButtonBinding(this);
 
@@ -39,15 +38,6 @@ public abstract class BasicForm extends FormPanel {
 		buttons.setTableWidth("100%");
 		buttons.setSpacing(10);
 		
-		
-		update = new Button("Update Results");
-		
-		update.addSelectionListener(updateTerms);
-		saveBinding.addButton(update);
-		
-		TableData td = new TableData();
-		td.setHorizontalAlign(HorizontalAlignment.CENTER);
-		buttons.add(update, td);
 		
 		add(buttons);
 
