@@ -14,7 +14,6 @@ import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FieldSet;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
-import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
@@ -27,7 +26,7 @@ public class DataForm extends BasicForm {
 	private GeneralText rSigRef, nAverageRef, resolution, bw;
 	//private GeneralCombo nOverlap;
 	private CheckBox averagePol, differenceSignal;
-	private RadioGroup smoothing, smoothing_factor;
+	private GeneralRadioGroup smoothing, smoothing_factor;
 	private Radio vel_res_rest_frame, freq_res_topo, freq_res_rest_frame, vel_res_topo_frame, freq_res_topo_frame;
 	private Label smoothing_factor_inst, rSigRefInst, nAverageRefInst;
 	private FieldSet smoothingFieldSet, sigRefSet;
@@ -66,7 +65,7 @@ public class DataForm extends BasicForm {
 		nAverageRef.setLabelStyle("display:none");
 		nAverageRefInst = new Label("In data reduction you have the option to average multiple reference observations in order to improve the noise. Enter number of reference observations that will be averaged together.");
 		
-		smoothing = new RadioGroup("smoothing");
+		smoothing = new GeneralRadioGroup("smoothing");
 		smoothing.setFieldLabel("Smooth On-source Data to a Desired");
 		smoothing.setName("smoothing");
 		smoothing.setId("smoothing");
@@ -152,7 +151,7 @@ public class DataForm extends BasicForm {
 		
 		smoothing_factor_inst = new Label("To improve signal-to-noise you can smooth reference observations to a resolution that is a few times courser than the signal observation.  Select the factor by which you want to smooth the reference observation:");
 				
-		smoothing_factor = new RadioGroup("smoothing_factor");
+		smoothing_factor = new GeneralRadioGroup("smoothing_factor");
 		smoothing_factor.setName("smoothing_factor");
 		smoothing_factor.setId("smoothing_factor");
 		smoothing_factor.setFieldLabel("Smoothing Factor");

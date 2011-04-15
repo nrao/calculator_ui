@@ -1,9 +1,16 @@
 package edu.nrao.dss.client.forms;
 
 import java.util.ArrayList;
+
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FieldEvent;
+import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
+import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Timer;
 
 
@@ -57,6 +64,21 @@ public class GeneralCombo extends ComboBox<ComboModel> {
 		setEditable(false);
 		setValue(this.getStore().getAt(0));
 		//setAutoWidth(true);
+		
+		addSelectionChangedListener(new SelectionChangedListener<ComboModel> () {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent<ComboModel> se) {
+				Element el = getElement();
+				if (el != null) {
+					com.google.gwt.dom.client.Element parent = el.getParentElement();
+					if (parent != null && isRendered()) {
+						parent.addClassName("x-grid3-dirty-cell");
+					}
+				}
+			}
+			
+		});
 	}
 
 	public void addOption(String value) {

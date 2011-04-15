@@ -78,5 +78,12 @@ public abstract class BasicForm extends FormPanel {
 			InputData.loadInput();
 		}
 	};
+	
+	public void submit() {
+		super.submit();
+		for(Field<?> field : getFields()){
+			field.getElement().getParentElement().removeClassName("x-grid3-dirty-cell");
+		}
+	}
 
 }

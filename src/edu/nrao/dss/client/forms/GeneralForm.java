@@ -9,15 +9,12 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.Radio;
-import com.extjs.gxt.ui.client.widget.form.RadioGroup;
-import com.extjs.gxt.ui.client.widget.form.FormPanel.LabelAlign;
-import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.core.client.GWT;
 
 public class GeneralForm extends BasicForm {
-	private RadioGroup units, conversion, semester;
+	private GeneralRadioGroup units, conversion, semester;
 	private GeneralText sensitivity, time;
 	private double seconds;
 
@@ -29,7 +26,7 @@ public class GeneralForm extends BasicForm {
 	public void initLayout() {
 		//setHeading("General Information");
 		
-		conversion = new RadioGroup("conversion");
+		conversion = new GeneralRadioGroup("conversion");
 		conversion.setFieldLabel("Derive");
 		conversion.setName("conversion");
 		conversion.setId("conversion");
@@ -83,7 +80,7 @@ public class GeneralForm extends BasicForm {
 		});
 		
 		// Unit choices
-		units = new RadioGroup("units");
+		units = new GeneralRadioGroup("units");
 		units.setFieldLabel("Sensitivity Units");
 		units.setOrientation(Orientation.VERTICAL);
 		units.setName("units");
@@ -111,7 +108,7 @@ public class GeneralForm extends BasicForm {
 		choice.setValue(true); // default
 		units.add(choice);
 
-		semester = new RadioGroup("semester");
+		semester = new GeneralRadioGroup("semester");
 		semester.setFieldLabel("Semester");
 		semester.setName("semester");
 		semester.setId("semester");

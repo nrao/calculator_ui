@@ -1,5 +1,8 @@
 package edu.nrao.dss.client.forms;
 
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FieldEvent;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.core.client.GWT;
 
@@ -11,6 +14,15 @@ public class GeneralText extends TextField<String> {
 		setFieldLabel(label);
 		getMessages().setRegexText("Invalid format");
 		setAllowBlank(false);
+		addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent be) {
+				getElement().getParentElement().addClassName("x-grid3-dirty-cell");
+				
+			}
+			
+		});
 	}
 
 	//Validates the field with the given Regular expression and sets

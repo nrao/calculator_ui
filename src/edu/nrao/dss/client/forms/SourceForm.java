@@ -13,7 +13,6 @@ import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FieldSet;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
-import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
 import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FillData;
@@ -27,7 +26,7 @@ public class SourceForm extends BasicForm {
 	private GeneralText sourceDec, restFreq, sourceVelocity, redshift,
 			topoFreq, rightAscension, tBG;
 	private GeneralCombo doppler;
-	private RadioGroup galactic, frame;
+	private GeneralRadioGroup galactic, frame;
 	private Slider diameter;
 	private LabelField diameter_display;
 	private double c      = 2.99792458e10; // speed of light in cm/s
@@ -54,7 +53,7 @@ public class SourceForm extends BasicForm {
 		redshift = new GeneralText("redshift", "Redshift");
 		redshift.setValue("0");
 		
-		frame = new RadioGroup("frame");
+		frame = new GeneralRadioGroup("frame");
 		frame.setFieldLabel("Frequency Specified in the");
 		frame.setName("frame");
 		frame.setId("frame");
@@ -75,7 +74,7 @@ public class SourceForm extends BasicForm {
 		choice.setValue(true);
 		frame.add(choice);
 		
-		galactic = new RadioGroup("galactic");
+		galactic = new GeneralRadioGroup("galactic");
 		galactic.setFieldLabel("Source Contribution to System Temperature");
 		galactic.setName("galactic");
 		galactic.setId("galactic");
