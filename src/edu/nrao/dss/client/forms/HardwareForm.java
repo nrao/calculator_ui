@@ -11,6 +11,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 
+import edu.nrao.dss.client.forms.fields.GeneralCombo;
+
 public class HardwareForm extends BasicForm {
 	private GeneralCombo backendCombo, modeCombo, receiverCombo;
 	private GeneralCombo beamCombo, polarizationCombo, bandwidthCombo;

@@ -13,6 +13,9 @@ import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.core.client.GWT;
 
+import edu.nrao.dss.client.forms.fields.GeneralRadioGroup;
+import edu.nrao.dss.client.forms.fields.GeneralText;
+
 public class GeneralForm extends BasicForm {
 	private GeneralRadioGroup units, conversion, semester;
 	private GeneralText sensitivity, time;

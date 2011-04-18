@@ -21,6 +21,11 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
 
+import edu.nrao.dss.client.forms.fields.ComboModel;
+import edu.nrao.dss.client.forms.fields.GeneralCombo;
+import edu.nrao.dss.client.forms.fields.GeneralRadioGroup;
+import edu.nrao.dss.client.forms.fields.GeneralText;
+
 
 public class SourceForm extends BasicForm {
 	private GeneralText sourceDec, restFreq, sourceVelocity, redshift,

@@ -1,4 +1,4 @@
-package edu.nrao.dss.client.forms;
+package edu.nrao.dss.client.forms.fields;
 
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;

@@ -1,4 +1,4 @@
-package edu.nrao.dss.client.forms;
+package edu.nrao.dss.client.forms.fields;
 
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
@@ -8,7 +8,7 @@ import com.google.gwt.core.client.GWT;
 
 public class GeneralText extends TextField<String> {
 
-	GeneralText(String name, String label){
+	public GeneralText(String name, String label){
 		setName(name);
 		setData("name", name);
 		setFieldLabel(label);

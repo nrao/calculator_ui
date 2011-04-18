@@ -20,12 +20,15 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.core.client.GWT;
 
 import edu.nrao.dss.client.Functions;
+import edu.nrao.dss.client.forms.fields.GeneralCheckbox;
+import edu.nrao.dss.client.forms.fields.GeneralRadioGroup;
+import edu.nrao.dss.client.forms.fields.GeneralText;
 
 
 public class DataForm extends BasicForm {
 	private GeneralText rSigRef, nAverageRef, resolution, bw;
 	//private GeneralCombo nOverlap;
-	private CheckBox averagePol, differenceSignal;
+	private GeneralCheckbox averagePol, differenceSignal;
 	private GeneralRadioGroup smoothing, smoothing_factor;
 	private Radio vel_res_rest_frame, freq_res_topo, freq_res_rest_frame, vel_res_topo_frame, freq_res_topo_frame;
 	private Label smoothing_factor_inst, rSigRefInst, nAverageRefInst;
@@ -46,14 +49,14 @@ public class DataForm extends BasicForm {
 		rSigRefInst = new Label("Ratio of observing time spent on-source/on-frequency to that spent on a reference position/reference frequency.");
 		
 		//nOverlap = new GeneralCombo("nOverlap","Enter number of spectral windows centered",  new ArrayList<String>(Arrays.asList("1","2")));
-		averagePol = new CheckBox();
+		averagePol = new GeneralCheckbox();
 		averagePol.setId("avg_pol");
 		averagePol.setName("avg_pol");
 		averagePol.setValueAttribute("true");
 		averagePol.setBoxLabel("Average Orthognal Polarizations");
 		averagePol.setLabelSeparator("");
 		averagePol.setValue(true);
-		differenceSignal =  new CheckBox();
+		differenceSignal =  new GeneralCheckbox();
 		differenceSignal.setId("diff_signal");
 		differenceSignal.setName("diff_signal");
 		differenceSignal.setValueAttribute("true");

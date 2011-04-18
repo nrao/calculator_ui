@@ -1,4 +1,4 @@
-package edu.nrao.dss.client.forms;
+package edu.nrao.dss.client.forms.fields;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package edu.nrao.dss.client.forms;
+package edu.nrao.dss.client.forms.fields;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.google.gwt.json.client.JSONValue;
