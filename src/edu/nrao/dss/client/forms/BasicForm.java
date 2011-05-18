@@ -32,16 +32,6 @@ public abstract class BasicForm extends FormPanel {
 		setAction("/calculator/set_terms/");
 		setMethod(FormPanel.Method.POST);
 		
-		addListener(Events.Submit, new Listener<FormEvent>() {
-
-			@Override
-			public void handleEvent(FormEvent be) {
-				//ResultsData.loadResults();
-				//InputData.loadInput();
-			}
-			
-		});
-
 		// setting layout
 		setLabelWidth(200);
 		setLabelAlign(LabelAlign.RIGHT);

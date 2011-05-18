@@ -146,35 +146,15 @@ public class Calculator_ui implements EntryPoint {
 				if (generalForm.isValid()) {
 				    generalForm.submit();
 				}
-//				if (hardwareForm.isValid()) {
-//					hardwareForm.submit();
-//				}
-//				if (sourceForm.isValid()) {
-//					sourceForm.submit();
-//				}
-//				if (dataForm.isValid()) {
-//					dataForm.submit();
-//				}
-				
 			}
 			
 		});
 		
-		Button getResults = new Button("Get Results");
-		getResults.addSelectionListener(new SelectionListener<ButtonEvent>() {
-
-			@Override
-			public void componentSelected(ButtonEvent ce) {
-				ResultsData.loadResults();
-				InputData.loadInput();
-			}
-		});
 		TableData td = new TableData();
 		td.setHorizontalAlign(HorizontalAlignment.CENTER);
 		td.setMargin(20);
 		td.setPadding(10);
 		right.add(update, td);
-		right.add(getResults, td);
 		
 		TabPanel results = new TabPanel();
 		results.setLayoutData(new RowLayout());
