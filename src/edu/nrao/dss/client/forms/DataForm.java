@@ -77,7 +77,7 @@ public class DataForm extends BasicForm {
 
 			@Override
 			public void handleEvent(FieldEvent be) {
-				updateBW(); //TODO call this on startup to initialize
+				updateBW();
 			}
 			
 		});

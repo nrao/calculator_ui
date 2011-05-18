@@ -36,8 +36,8 @@ public abstract class BasicForm extends FormPanel {
 
 			@Override
 			public void handleEvent(FormEvent be) {
-				ResultsData.loadResults();
-				InputData.loadInput();
+				//ResultsData.loadResults();
+				//InputData.loadInput();
 			}
 			
 		});
