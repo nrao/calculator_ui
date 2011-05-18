@@ -10,6 +10,9 @@ import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.VerticalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FormEvent;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
@@ -68,6 +71,46 @@ public class Calculator_ui implements EntryPoint {
 		final SourceForm sourceForm     = new SourceForm();
 		final DataForm dataForm         = new DataForm();
 		
+		generalForm.addListener(Events.Submit, new Listener<FormEvent>() {
+
+			@Override
+			public void handleEvent(FormEvent be) {
+				if (hardwareForm.isValid()) {
+					hardwareForm.submit();
+				}
+			}
+			
+		});
+		hardwareForm.addListener(Events.Submit, new Listener<FormEvent>() {
+
+			@Override
+			public void handleEvent(FormEvent be) {
+				if (sourceForm.isValid()) {
+					sourceForm.submit();
+				}
+			}
+			
+		});
+		sourceForm.addListener(Events.Submit, new Listener<FormEvent>() {
+
+			@Override
+			public void handleEvent(FormEvent be) {
+				if (dataForm.isValid()) {
+					dataForm.submit();
+				}
+			}
+			
+		});
+		dataForm.addListener(Events.Submit, new Listener<FormEvent>() {
+
+			@Override
+			public void handleEvent(FormEvent be) {
+				ResultsData.loadResults();
+				InputData.loadInput();
+			}
+			
+		});
+		
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
 		sourceForm.addObserver(dataForm);
@@ -103,15 +146,15 @@ public class Calculator_ui implements EntryPoint {
 				if (generalForm.isValid()) {
 				    generalForm.submit();
 				}
-				if (hardwareForm.isValid()) {
-					hardwareForm.submit();
-				}
-				if (sourceForm.isValid()) {
-					sourceForm.submit();
-				}
-				if (dataForm.isValid()) {
-					dataForm.submit();
-				}
+//				if (hardwareForm.isValid()) {
+//					hardwareForm.submit();
+//				}
+//				if (sourceForm.isValid()) {
+//					sourceForm.submit();
+//				}
+//				if (dataForm.isValid()) {
+//					dataForm.submit();
+//				}
 				
 			}
 			
