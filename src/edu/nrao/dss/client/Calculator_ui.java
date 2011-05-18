@@ -112,8 +112,6 @@ public class Calculator_ui implements EntryPoint {
 				if (dataForm.isValid()) {
 					dataForm.submit();
 				}
-				ResultsData.loadResults();
-				InputData.loadInput();
 				
 			}
 			

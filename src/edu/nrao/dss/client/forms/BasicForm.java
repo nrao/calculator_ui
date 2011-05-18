@@ -3,7 +3,11 @@ package edu.nrao.dss.client.forms;
 import java.util.ArrayList;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FormEvent;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -12,6 +16,7 @@ import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
+import com.gargoylesoftware.htmlunit.javascript.host.Event;
 import com.google.gwt.core.client.GWT;
 
 import edu.nrao.dss.client.data.InputData;
@@ -26,6 +31,16 @@ public abstract class BasicForm extends FormPanel {
 		setCollapsible(true);
 		setAction("/calculator/set_terms/");
 		setMethod(FormPanel.Method.POST);
+		
+		addListener(Events.Submit, new Listener<FormEvent>() {
+
+			@Override
+			public void handleEvent(FormEvent be) {
+				ResultsData.loadResults();
+				InputData.loadInput();
+			}
+			
+		});
 
 		// setting layout
 		setLabelWidth(200);
