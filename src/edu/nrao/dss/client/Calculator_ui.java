@@ -16,6 +16,7 @@ import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
@@ -180,6 +181,8 @@ public class Calculator_ui implements EntryPoint {
 		right.add(results);
 		rcp.add(right);
 		
-		RootPanel.get().add(rcp);
+		RootPanel rp = RootPanel.get();
+		rp.add(new Html("<a href=\"mailto:helpdesk-dss@gb.nrao.edu\">Help Desk</a>"));
+		rp.add(rcp);
 	}
 }
