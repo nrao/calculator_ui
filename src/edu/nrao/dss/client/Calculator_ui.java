@@ -14,6 +14,7 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Html;
@@ -26,9 +27,11 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.ColumnData;
 import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import edu.nrao.dss.client.data.DataGrid;
@@ -139,6 +142,12 @@ public class Calculator_ui implements EntryPoint {
 		right.setHeading("Controls");
 		right.setLayout(new TableLayout());
 		
+		ContentPanel controls = new ContentPanel();
+		controls.setLayout(new RowLayout(Orientation.HORIZONTAL));
+		controls.setHeaderVisible(false);
+		controls.setBorders(false);
+		controls.setSize(200, 30);
+		
 		Button update = new Button("Update Results");
 		update.addSelectionListener(new SelectionListener<ButtonEvent>() {
 
@@ -151,11 +160,23 @@ public class Calculator_ui implements EntryPoint {
 			
 		});
 		
+		Button save = new Button("Save to File");
+		save.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				Window.Location.assign("/calculator/results/text");
+			}
+			
+		});
+		
 		TableData td = new TableData();
 		td.setHorizontalAlign(HorizontalAlignment.CENTER);
 		td.setMargin(20);
 		td.setPadding(10);
-		right.add(update, td);
+		controls.add(update, new RowData(-1, -1, new Margins(0, 4, 0, 4)));
+		controls.add(save, new RowData(-1, -1, new Margins(0, 4, 0, 4)));
+		right.add(controls, td);
 		
 		TabPanel results = new TabPanel();
 		results.setLayoutData(new RowLayout());
