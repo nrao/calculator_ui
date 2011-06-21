@@ -39,7 +39,7 @@ import edu.nrao.dss.client.forms.fields.GeneralRadioGroup;
 import edu.nrao.dss.client.forms.fields.GeneralText;
 
 public class GeneralForm extends BasicForm {
-	private GeneralRadioGroup units, conversion, semester;
+	private GeneralRadioGroup units, conversion;
 	private GeneralText sensitivity, time;
 	private double seconds;
 
@@ -75,7 +75,7 @@ public class GeneralForm extends BasicForm {
 		sensitivity.setMaxLength(6);
 		
 		// Desired time
-		time = new GeneralText("time", "Observing Time (H:M:S or SS.SS)");
+		time = new GeneralText("time", "Total Time Required for On (+ Off) Observation (H:M:S or SS.SS)");
 		time.setToolTip("Enter time in HH:MM:SS.SS, MM:SS.SS, or SS.SS");
 		//time.setMaxLength(6);
 		time.setAllowBlank(true);
@@ -119,43 +119,19 @@ public class GeneralForm extends BasicForm {
 		
 		units.add(choice);
 		choice = new Radio();
-		choice.setBoxLabel("Ta (mK)");
+		choice.setBoxLabel("Antenna Temp., Ta (mK)");
 		choice.setName("ta");
 		choice.setValueAttribute("ta");
 		choice.setToolTip("Use Ta (mK, and as measured below the Earth's atmosphere) for sensitivity units.");
 		units.add(choice);
 
 		choice = new Radio();
-		choice.setBoxLabel("Tr (mK)");
+		choice.setBoxLabel("Radiation Temp., Tr (mK)");
 		choice.setName("tr");
 		choice.setValueAttribute("tr");
 		choice.setToolTip("Use Tr (mK, and as measured above the Earth's atmosphere) for sensitivity units.");
 		choice.setValue(true); // default
 		units.add(choice);
-
-		semester = new GeneralRadioGroup("semester");
-		semester.setFieldLabel("Semester");
-		semester.setName("semester");
-		semester.setId("semester");
-		
-		choice = new Radio();
-		choice.setBoxLabel("A");
-		choice.setValueAttribute("A");
-		choice.setName("A");
-		choice.setValue(true);
-		semester.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("B");
-		choice.setValueAttribute("B");
-		choice.setName("B");
-		semester.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("Full Year");
-		choice.setValueAttribute("Full Year");
-		choice.setName("Full Year");
-		semester.add(choice);
 
 		// attach listeners
 		conversion.addListener(Events.Change, new handleConversion());
@@ -167,7 +143,6 @@ public class GeneralForm extends BasicForm {
 		add(units);
 		add(sensitivity, fd);
 		add(time, new FormData(70, 20));
-		add(semester);
 
 	}
 
