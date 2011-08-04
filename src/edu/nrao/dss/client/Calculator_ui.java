@@ -225,7 +225,7 @@ public class Calculator_ui implements EntryPoint {
 		rcp.add(right);
 		
 		RootPanel rp = RootPanel.get();
-		rp.add(new Html("<a href=\"mailto:helpdesk-dss@gb.nrao.edu\">Help Desk</a> | <a href=\"/docs/Calculator_ug.pdf\">Users Guide</a>"));
+		rp.add(new Html("<a href=\"https://help.nrao.edu\">Help Desk</a> | <a href=\"/docs/Calculator_ug.pdf\">Users Guide</a>"));
 		rp.add(rcp);
 	}
 }
