@@ -54,7 +54,7 @@ public class SourceForm extends BasicForm {
 			topoFreq, rightAscension, tBG;
 	private GeneralCombo doppler;
 	private GeneralRadioGroup galactic, frame;
-	private Slider diameter;
+	private Slider diameter, minElevation;
 	private LabelField diameter_display;
 	private double c      = 2.99792458e10; // speed of light in cm/s
 	private String rx;
@@ -148,6 +148,17 @@ public class SourceForm extends BasicForm {
 		sf.setName("source_diameter_slider");
 		sf.setId("source_diameter_slider");
 		
+		minElevation = new Slider();
+		minElevation.setMinValue(5);
+		minElevation.setMaxValue(90);
+		minElevation.setValue(5);
+		minElevation.setIncrement(1);
+		
+		final SliderField sf2 = new SliderField(minElevation);
+		sf2.setFieldLabel("Minimum Elevation");
+		sf2.setName("min_elevation");
+		sf2.setId("min_elevation");
+		
 		rightAscension = new GeneralText("right_ascension", "Approx Right Ascension (HH:MM)");
 		rightAscension.setMessageTarget("side");
 		rightAscension.setValue("0");
@@ -239,6 +250,7 @@ public class SourceForm extends BasicForm {
 		add(fs);
 		
 		add(sourceDec, fd);
+		add(sf2);
 		
 	}
 	
