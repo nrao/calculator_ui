@@ -10,10 +10,11 @@
 .project
 .metadata
 .settings
-
+.gwt
 
 www/
 www-test/
 war/calculator_ui
 war/resources
 war/WEB-INF
+war/edu.nrao.dss.Calculator_ui.JUnit/
