@@ -36,6 +36,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.gargoylesoftware.htmlunit.javascript.host.Event;
@@ -89,7 +90,10 @@ public abstract class BasicForm extends FormPanel {
 				
 				if (name != null) {
 					if (name.equals("frame")) {
-						form.notify(name, ((RadioGroup) fe).getValue().getValueAttribute());
+						Radio choice = ((RadioGroup) fe).getValue();
+						if (choice != null) {
+							form.notify(name, choice.getValueAttribute());
+						}
 					} else {
 						form.notify(name, fe.getRawValue());
 					}

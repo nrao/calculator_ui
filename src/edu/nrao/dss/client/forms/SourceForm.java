@@ -54,6 +54,7 @@ public class SourceForm extends BasicForm {
 			topoFreq, rightAscension, tBG;
 	private GeneralCombo doppler;
 	private GeneralRadioGroup galactic, frame;
+	private Radio topoFrame, restFrame;
 	private Slider diameter, minElevation;
 	private LabelField diameter_display;
 	private double c      = 2.99792458e10; // speed of light in cm/s
@@ -86,20 +87,20 @@ public class SourceForm extends BasicForm {
 		frame.setId("frame");
 		frame.setOrientation(Orientation.VERTICAL);
 		
-		Radio choice = new Radio();
-		choice.setBoxLabel("Topocentric Frame");
-		choice.setValueAttribute("Topocentric Frame");
-		choice.setName("topocentric_frame");
-		choice.setLabelSeparator("");
-		frame.add(choice);
+		topoFrame = new Radio();
+		topoFrame.setBoxLabel("Topocentric Frame");
+		topoFrame.setValueAttribute("Topocentric Frame");
+		topoFrame.setName("topocentric_frame");
+		topoFrame.setLabelSeparator("");
+		frame.add(topoFrame);
 		
-		choice = new Radio();
-		choice.setBoxLabel("Rest Frame");
-		choice.setValueAttribute("Rest Frame");
-		choice.setName("rest_frame");
-		choice.setLabelSeparator("");
-		choice.setValue(true);
-		frame.add(choice);
+		restFrame = new Radio();
+		restFrame.setBoxLabel("Rest Frame");
+		restFrame.setValueAttribute("Rest Frame");
+		restFrame.setName("rest_frame");
+		restFrame.setLabelSeparator("");
+		restFrame.setValue(true);
+		frame.add(restFrame);
 		
 		galactic = new GeneralRadioGroup("galactic");
 		galactic.setFieldLabel("Source Contribution to System Temperature");
@@ -107,7 +108,7 @@ public class SourceForm extends BasicForm {
 		galactic.setId("galactic");
 		galactic.setOrientation(Orientation.VERTICAL);
 		
-		choice = new Radio();
+		Radio choice = new Radio();
 		choice.setBoxLabel("No Correction");
 		choice.setToolTip("Assume there is no contribution from the source to Tsys.");
 		choice.setValueAttribute("no_correction");
@@ -316,9 +317,10 @@ public class SourceForm extends BasicForm {
 	}
 	
 	private void calcDiameter() {
-		// Do we have everything we need?		
-		if (!topoFreq.getValue().isEmpty() & !restFreq.getValue().isEmpty() & !sourceVelocity.getValue().isEmpty() & !redshift.getValue().isEmpty()) {
-			if (frame.getValue().getValueAttribute().equals("Topocentric Frame")) {
+		// Do we have everything we need?	
+		Radio frameChoice = frame.getValue();
+		if (frameChoice != null & !topoFreq.getValue().isEmpty() & !restFreq.getValue().isEmpty() & !sourceVelocity.getValue().isEmpty() & !redshift.getValue().isEmpty()) {
+			if (frameChoice.getValueAttribute().equals("Topocentric Frame")) {
 				double d = 0.1 * diameter.getValue() * calcFWHM(Double.valueOf(topoFreq.getValue()) * 1e6);
 				diameter_display.setValue(NumberFormat.getFormat("#.##").format(d));
 			} else {
@@ -355,6 +357,7 @@ public class SourceForm extends BasicForm {
 		if (name.equals("mode")) {
 			if (value.equals("Spectral Line")) {
 				frame.show();
+				restFrame.setValue(true);
 				topoFreq.hide();
 				topoFreq.setAllowBlank(true);
 				restFreq.show();
@@ -366,6 +369,7 @@ public class SourceForm extends BasicForm {
 				sourceVelocity.setAllowBlank(false);
 			} else {
 				frame.hide();
+				topoFrame.setValue(true);
 				restFreq.hide();
 				restFreq.setAllowBlank(true);
 				doppler.hide();
@@ -387,6 +391,10 @@ public class SourceForm extends BasicForm {
 				topoFreq.setValue("" + freq_mid);
 			}
 			rx = value;
+		} else if (name.equals("backend")) {
+			if (value.equals("Mustang")) {
+				topoFreq.setValue("90000");
+			}
 		}
 		notifyAllForms();
 
@@ -408,25 +416,28 @@ public class SourceForm extends BasicForm {
 
 	class HandleFrame implements Listener<FieldEvent> {
 		public void handleEvent(FieldEvent fe) {
-			if (frame.getValue().getValueAttribute().equals("Rest Frame")) {
-				topoFreq.hide();
-				topoFreq.setAllowBlank(true);
-				restFreq.show();
-				restFreq.setAllowBlank(false);
-				doppler.show();
-				updateDopplerFields();
-			} else {
-				topoFreq.show();
-				topoFreq.setAllowBlank(false);
-				restFreq.hide();
-				restFreq.setAllowBlank(true);
-				doppler.hide();
-				sourceVelocity.hide();
-				sourceVelocity.setAllowBlank(true);
-				redshift.hide();
-				redshift.setAllowBlank(true);
+			Radio choice = frame.getValue();
+			if (choice != null) {
+				if (choice.getValueAttribute().equals("Rest Frame")) {
+					topoFreq.hide();
+					topoFreq.setAllowBlank(true);
+					restFreq.show();
+					restFreq.setAllowBlank(false);
+					doppler.show();
+					updateDopplerFields();
+				} else {
+					topoFreq.show();
+					topoFreq.setAllowBlank(false);
+					restFreq.hide();
+					restFreq.setAllowBlank(true);
+					doppler.hide();
+					sourceVelocity.hide();
+					sourceVelocity.setAllowBlank(true);
+					redshift.hide();
+					redshift.setAllowBlank(true);
+				}
+				notifyAllForms();
 			}
-			notifyAllForms();
 		}
 	}
 
