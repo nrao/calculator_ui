@@ -56,7 +56,7 @@ public class SourceForm extends BasicForm {
 	private GeneralRadioGroup galactic, frame;
 	private Radio topoFrame, restFrame;
 	private Slider diameter, minElevation;
-	private LabelField diameter_display;
+	private LabelField diameter_display, minElevationDisplay;
 	private double c      = 2.99792458e10; // speed of light in cm/s
 	private String rx;
 	
@@ -149,14 +149,19 @@ public class SourceForm extends BasicForm {
 		sf.setName("source_diameter_slider");
 		sf.setId("source_diameter_slider");
 		
+		minElevationDisplay = new LabelField("5");
+		minElevationDisplay.setFieldLabel("Minimum Elevation");
+		minElevationDisplay.setLabelSeparator(":");
+		
 		minElevation = new Slider();
 		minElevation.setMinValue(5);
 		minElevation.setMaxValue(90);
 		minElevation.setValue(5);
 		minElevation.setIncrement(1);
+		minElevation.setUseTip(false);
 		
 		final SliderField sf2 = new SliderField(minElevation);
-		sf2.setFieldLabel("Minimum Elevation");
+		sf2.setLabelSeparator("");
 		sf2.setName("min_elevation");
 		sf2.setId("min_elevation");
 		
@@ -251,6 +256,7 @@ public class SourceForm extends BasicForm {
 		add(fs);
 		
 		add(sourceDec, fd);
+		add(minElevationDisplay);
 		add(sf2);
 		
 	}
@@ -272,6 +278,15 @@ public class SourceForm extends BasicForm {
 				notifyAllForms();
 			}
 		});
+		minElevation.addListener(Events.Change, new Listener<SliderEvent> () {
+
+			@Override
+			public void handleEvent(SliderEvent se) {
+				minElevationDisplay.setValue("" + minElevation.getValue());
+			}
+			
+		});
+		
 		doppler.addListener(Events.Select, new HandleDoppler());
 		doppler.addListener(Events.Select, new Listener<FieldEvent> () {
 
