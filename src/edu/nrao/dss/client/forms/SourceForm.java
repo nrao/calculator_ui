@@ -50,13 +50,13 @@ import edu.nrao.dss.client.forms.fields.GeneralText;
 
 
 public class SourceForm extends BasicForm {
-	private GeneralText sourceDec, restFreq, sourceVelocity, redshift,
+	private GeneralText restFreq, sourceVelocity, redshift,
 			topoFreq, rightAscension, tBG;
 	private GeneralCombo doppler;
 	private GeneralRadioGroup galactic, frame;
 	private Radio topoFrame, restFrame;
-	private Slider diameter, minElevation;
-	private LabelField diameter_display, minElevationDisplay;
+	private Slider diameter, minElevation, declination;
+	private LabelField diameter_display, minElevationDisplay, decDisplay;
 	private double c      = 2.99792458e10; // speed of light in cm/s
 	private String rx;
 	
@@ -67,8 +67,6 @@ public class SourceForm extends BasicForm {
 
 	public void initLayout() {
 		setCollapsible(true);
-		sourceDec = new GeneralText("declination", "Est. Source Declination (SDD:MM)");
-		sourceDec.setValue("38:26");
 		
 		restFreq  = new GeneralText("rest_freq", "Rest Frequency (MHz)");
 		restFreq.setValue("1420");
@@ -165,6 +163,22 @@ public class SourceForm extends BasicForm {
 		sf2.setName("min_elevation");
 		sf2.setId("min_elevation");
 		
+		decDisplay = new LabelField("0");
+		decDisplay.setFieldLabel("Declination");
+		decDisplay.setLabelSeparator(":");
+		
+		declination = new Slider();
+		declination.setMinValue(-52);
+		declination.setMaxValue(90);
+		declination.setValue(0);
+		declination.setIncrement(1);
+		declination.setUseTip(false);
+		
+		final SliderField sf3 = new SliderField(declination);
+		sf3.setLabelSeparator("");
+		sf3.setName("declination");
+		sf3.setId("declination");
+		
 		rightAscension = new GeneralText("right_ascension", "Approx Right Ascension (HH:MM)");
 		rightAscension.setMessageTarget("side");
 		rightAscension.setValue("0");
@@ -195,32 +209,6 @@ public class SourceForm extends BasicForm {
 		tBG.setToolTip("Enter contribution of source to continuum level in units of K.");
 		tBG.setValue("0");
         
-		sourceDec.setMessageTarget("side");
-		sourceDec.setValidator(new Validator () {
-
-			@Override
-			public String validate(Field<?> field, String value) {
-				if (value.isEmpty() || value.equals("-")) {
-					return null;
-				}
-				
-				String[] values = value.split(":");
-				if (values.length < 2) {
-					return null;
-				}
-				
-				float min_el = (float) 0.0;
-				float dec = (float) (Float.valueOf(values[0]).floatValue() + Float.valueOf(values[1]).floatValue() / 60.0);
-				if (dec + min_el <= -51.57) {
-					return "Declination " + value + "does not achieve the desired minimum elevation for the chosen receiver and frequency.";
-				} else if (Float.valueOf(values[1]) >= 60.0) {
-					return "Minutes cannot be greater than or equal to 60.";
-				}
-				return null;
-			}
-			
-		});
-		
 		topoFreq.hide();
 		topoFreq.setAllowBlank(true);
 		redshift.hide();
@@ -242,7 +230,7 @@ public class SourceForm extends BasicForm {
 		add(redshift, fd);
 		add(sourceVelocity, fd);
 		add(diameter_display);
-		add(sf);
+		add(sf); // source diameter
 		
 		FieldSet fs = new FieldSet();
 		fs.setHeading("Source Contribution Corrections");
@@ -255,9 +243,10 @@ public class SourceForm extends BasicForm {
 		fs.add(tBG, fd);
 		add(fs);
 		
-		add(sourceDec, fd);
+		add(decDisplay);
+		add(sf3);  // declination
 		add(minElevationDisplay);
-		add(sf2);
+		add(sf2);  // min el
 		
 	}
 	
@@ -283,6 +272,14 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(SliderEvent se) {
 				minElevationDisplay.setValue("" + minElevation.getValue());
+			}
+			
+		});
+		declination.addListener(Events.Change, new Listener<SliderEvent> () {
+
+			@Override
+			public void handleEvent(SliderEvent se) {
+				decDisplay.setValue("" + declination.getValue());
 			}
 			
 		});
