@@ -71,9 +71,9 @@ public class SourceForm extends BasicForm {
 		sourceDec.setValue("38:26");
 		
 		restFreq  = new GeneralText("rest_freq", "Rest Frequency (MHz)");
-		restFreq.setValue("0");
+		restFreq.setValue("1420");
 		topoFreq  = new GeneralText("topocentric_freq", "Topocentric Frequency (MHz)");
-		topoFreq.setValue("0");
+		topoFreq.setValue("1420");
 		doppler   = new GeneralCombo("doppler", "Doppler Correction", getDoppler());
 		doppler.setValue(new ComboModel("Optical"));
 		sourceVelocity = new GeneralText("source_velocity", "Source Velocity (km/s)");
