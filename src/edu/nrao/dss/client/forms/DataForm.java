@@ -350,10 +350,12 @@ public class DataForm extends BasicForm {
 			}
 
 		} else if (name.equals("polarization")) {
-			if (value.equals("Dual")) {
-				averagePol.setValue(true);
-			} else {
-				averagePol.setValue(false);				
+			if (!value.equals("NOTHING")) {
+				if (value.equals("Dual")) {
+					averagePol.setValue(true);
+				} else {
+					averagePol.setValue(false);				
+				}				
 			}
 		} else if (name.equals("bandwidth") & !value.equals("NOTHING")) {
 			bandwidth = Float.valueOf(value);
