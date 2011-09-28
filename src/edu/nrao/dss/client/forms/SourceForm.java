@@ -33,6 +33,7 @@ import com.extjs.gxt.ui.client.event.SliderEvent;
 import com.extjs.gxt.ui.client.widget.Slider;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FieldSet;
+import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.SliderField;
@@ -40,6 +41,8 @@ import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FillData;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.extjs.gxt.ui.client.widget.layout.TableData;
+import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
 
@@ -143,12 +146,12 @@ public class SourceForm extends BasicForm {
 		diameter.setUseTip(false);
 		
 		final SliderField sf = new SliderField(diameter);
-		sf.setLabelSeparator("");
 		sf.setName("source_diameter_slider");
 		sf.setId("source_diameter_slider");
+		sf.setLabelSeparator("");
 		
 		minElevationDisplay = new LabelField("5");
-		minElevationDisplay.setFieldLabel("Minimum Elevation");
+		minElevationDisplay.setFieldLabel("Minimum Elevation (Deg)");
 		minElevationDisplay.setLabelSeparator(":");
 		
 		minElevation = new Slider();
@@ -164,11 +167,11 @@ public class SourceForm extends BasicForm {
 		sf2.setId("min_elevation");
 		
 		decDisplay = new LabelField("0");
-		decDisplay.setFieldLabel("Declination");
+		decDisplay.setFieldLabel("Source Declination (Deg)");
 		decDisplay.setLabelSeparator(":");
 		
 		declination = new Slider();
-		declination.setMinValue(-52);
+		declination.setMinValue(-47);
 		declination.setMaxValue(90);
 		declination.setValue(0);
 		declination.setIncrement(1);
@@ -229,6 +232,7 @@ public class SourceForm extends BasicForm {
 		add(doppler);
 		add(redshift, fd);
 		add(sourceVelocity, fd);
+		
 		add(diameter_display);
 		add(sf); // source diameter
 		
