@@ -58,8 +58,9 @@ public class SourceForm extends BasicForm {
 	private GeneralCombo doppler;
 	private GeneralRadioGroup galactic, frame;
 	private Radio topoFrame, restFrame;
-	private Slider diameter, minElevation, declination;
-	private LabelField diameter_display, minElevationDisplay, decDisplay;
+	private Slider diameter, minElevation, declination, dutyCycle, effectiveBw;
+	private SliderField diameterSF, minElevationSF, declinationSF, dutyCycleSF, effectiveBwSF;
+	private LabelField diameter_display, minElevationDisplay, decDisplay, dutyCycleDisplay, effectiveBwDisplay;
 	private double c      = 2.99792458e10; // speed of light in cm/s
 	private String rx;
 	
@@ -71,6 +72,60 @@ public class SourceForm extends BasicForm {
 	public void initLayout() {
 		setCollapsible(true);
 		
+		initSourceFrequencyFields();
+		initTsysContributionFields();
+		initSourcePositionFields();
+		initPulsarFields();
+		
+		topoFreq.hide();
+		topoFreq.setAllowBlank(true);
+		redshift.hide();
+		redshift.setAllowBlank(true);
+		rightAscension.hide();
+		rightAscension.setAllowBlank(true);
+		dutyCycleDisplay.hide();
+		dutyCycleSF.hide();
+		effectiveBwDisplay.hide();
+		effectiveBw.hide();
+
+		initListeners();
+
+		FormData fd = new FormData(60, 20);
+		 
+		// attaching fields
+		add(frame);
+		add(restFreq, fd);
+		add(topoFreq, fd);
+		add(doppler);
+		add(redshift, fd);
+		add(sourceVelocity, fd);
+		
+		add(diameter_display);
+		add(diameterSF); // source diameter
+		
+		add(dutyCycleDisplay);
+		add(dutyCycleSF);
+		add(effectiveBwDisplay);
+		add(effectiveBwSF);
+		
+		FieldSet fs = new FieldSet();
+		fs.setHeading("Source Contribution Corrections");
+		FormLayout layout = new FormLayout();  
+		layout.setLabelWidth(200);  
+		fs.setLayout(layout);
+		
+		fs.add(galactic);
+		fs.add(rightAscension, fd);
+		fs.add(tBG, fd);
+		add(fs);
+		
+		add(decDisplay);
+		add(declinationSF);  // declination
+		add(minElevationDisplay);
+		add(minElevationSF);  // min el
+	}
+	
+	private void initSourceFrequencyFields() {
 		restFreq  = new GeneralText("rest_freq", "Rest Frequency (MHz)");
 		restFreq.setValue("1420");
 		topoFreq  = new GeneralText("topocentric_freq", "Topocentric Frequency (MHz)");
@@ -102,7 +157,9 @@ public class SourceForm extends BasicForm {
 		restFrame.setLabelSeparator("");
 		restFrame.setValue(true);
 		frame.add(restFrame);
-		
+	}
+	
+	private void initTsysContributionFields(){
 		galactic = new GeneralRadioGroup("galactic");
 		galactic.setFieldLabel("Source Contribution to System Temperature");
 		galactic.setName("galactic");
@@ -110,20 +167,13 @@ public class SourceForm extends BasicForm {
 		galactic.setOrientation(Orientation.VERTICAL);
 		
 		Radio choice = new Radio();
-		choice.setBoxLabel("No Correction");
-		choice.setToolTip("Assume there is no contribution from the source to Tsys.");
-		choice.setValueAttribute("no_correction");
-		choice.setName("no_correction");
-		choice.setLabelSeparator("");
-		choice.setValue(true);
-		galactic.add(choice);
-		
 		choice = new Radio();
 		choice.setBoxLabel("User Estimated Correction");
 		choice.setToolTip("Enter a value for the expected contribution from the source to Tsys.");
 		choice.setValueAttribute("estimated");
 		choice.setName("estimated");
 		choice.setLabelSeparator("");
+		choice.setValue(true);
 		galactic.add(choice);
 		
 		choice = new Radio();
@@ -134,6 +184,12 @@ public class SourceForm extends BasicForm {
 		choice.setLabelSeparator("");
 		galactic.add(choice);
 		
+		tBG            = new GeneralText("estimated_continuum", "Contribution (K)");
+		tBG.setToolTip("Enter contribution of source to continuum level in units of K.");
+		tBG.setValue("0");
+	}
+	
+	private void initSourcePositionFields() {
 		diameter_display = new LabelField("0.0");
 		diameter_display.setFieldLabel("Source Diameter (arc minutes)");
 		diameter_display.setLabelSeparator(":");
@@ -145,10 +201,10 @@ public class SourceForm extends BasicForm {
 		diameter.setIncrement(1);
 		diameter.setUseTip(false);
 		
-		final SliderField sf = new SliderField(diameter);
-		sf.setName("source_diameter_slider");
-		sf.setId("source_diameter_slider");
-		sf.setLabelSeparator("");
+		diameterSF = new SliderField(diameter);
+		diameterSF.setName("source_diameter_slider");
+		diameterSF.setId("source_diameter_slider");
+		diameterSF.setLabelSeparator("");
 		
 		minElevationDisplay = new LabelField("5");
 		minElevationDisplay.setFieldLabel("Minimum Elevation (Deg)");
@@ -161,10 +217,10 @@ public class SourceForm extends BasicForm {
 		minElevation.setIncrement(1);
 		minElevation.setUseTip(false);
 		
-		final SliderField sf2 = new SliderField(minElevation);
-		sf2.setLabelSeparator("");
-		sf2.setName("min_elevation");
-		sf2.setId("min_elevation");
+		minElevationSF = new SliderField(minElevation);
+		minElevationSF.setLabelSeparator("");
+		minElevationSF.setName("min_elevation");
+		minElevationSF.setId("min_elevation");
 		
 		decDisplay = new LabelField("0");
 		decDisplay.setFieldLabel("Source Declination (Deg)");
@@ -177,10 +233,10 @@ public class SourceForm extends BasicForm {
 		declination.setIncrement(1);
 		declination.setUseTip(false);
 		
-		final SliderField sf3 = new SliderField(declination);
-		sf3.setLabelSeparator("");
-		sf3.setName("declination");
-		sf3.setId("declination");
+		declinationSF = new SliderField(declination);
+		declinationSF.setLabelSeparator("");
+		declinationSF.setName("declination");
+		declinationSF.setId("declination");
 		
 		rightAscension = new GeneralText("right_ascension", "Approx Right Ascension (HH:MM)");
 		rightAscension.setMessageTarget("side");
@@ -207,50 +263,38 @@ public class SourceForm extends BasicForm {
 			}
 			
 		});
+	}
+	
+	private void initPulsarFields() {
+		dutyCycleDisplay = new LabelField("10");
+		dutyCycleDisplay.setFieldLabel("Duty Cycle (%)");
+		dutyCycleDisplay.setLabelSeparator(":");
 		
-		tBG            = new GeneralText("estimated_continuum", "Contribution (K)");
-		tBG.setToolTip("Enter contribution of source to continuum level in units of K.");
-		tBG.setValue("0");
-        
-		topoFreq.hide();
-		topoFreq.setAllowBlank(true);
-		redshift.hide();
-		redshift.setAllowBlank(true);
-		rightAscension.hide();
-		rightAscension.setAllowBlank(true);
-		tBG.hide();
-		tBG.setAllowBlank(true);
-
-		initListeners();
-
-		FormData fd = new FormData(60, 20);
-		 
-		// attaching fields
-		add(frame);
-		add(restFreq, fd);
-		add(topoFreq, fd);
-		add(doppler);
-		add(redshift, fd);
-		add(sourceVelocity, fd);
+		dutyCycle = new Slider();
+		dutyCycle.setMinValue(1);
+		dutyCycle.setMaxValue(100);
+		dutyCycle.setValue(10);
+		dutyCycle.setIncrement(5);
+		dutyCycle.setUseTip(false);
 		
-		add(diameter_display);
-		add(sf); // source diameter
+		dutyCycleSF = new SliderField(dutyCycle);
+		dutyCycleSF.setLabelSeparator("");
+		dutyCycleSF.setName("duty_cycle");
+		dutyCycleSF.setId("duty_cycle");
 		
-		FieldSet fs = new FieldSet();
-		fs.setHeading("Source Contribution Corrections");
-		FormLayout layout = new FormLayout();  
-		layout.setLabelWidth(200);  
-		fs.setLayout(layout);
+		effectiveBwDisplay = new LabelField("0");
+		effectiveBwDisplay.setFieldLabel("Effective BW");
+		effectiveBwDisplay.setLabelSeparator(":");
 		
-		fs.add(galactic);
-		fs.add(rightAscension, fd);
-		fs.add(tBG, fd);
-		add(fs);
+		effectiveBw = new Slider();
+		effectiveBw.setMinValue(1);
+		effectiveBw.setMaxValue(100);
+		effectiveBw.setUseTip(false);
 		
-		add(decDisplay);
-		add(sf3);  // declination
-		add(minElevationDisplay);
-		add(sf2);  // min el
+		effectiveBwSF = new SliderField(effectiveBw);
+		effectiveBwSF.setLabelSeparator("");
+		effectiveBwSF.setName("effective_bw");
+		effectiveBwSF.setId("effective_bw");
 		
 	}
 	
@@ -284,6 +328,22 @@ public class SourceForm extends BasicForm {
 			@Override
 			public void handleEvent(SliderEvent se) {
 				decDisplay.setValue("" + declination.getValue());
+			}
+			
+		});
+		dutyCycle.addListener(Events.Change, new Listener<SliderEvent> () {
+
+			@Override
+			public void handleEvent(SliderEvent se) {
+				dutyCycleDisplay.setValue("" + dutyCycle.getValue());
+			}
+			
+		});
+		effectiveBw.addListener(Events.Change, new Listener<SliderEvent> () {
+
+			@Override
+			public void handleEvent(SliderEvent se) {
+				effectiveBwDisplay.setValue("" + effectiveBw.getValue());
 			}
 			
 		});
@@ -371,6 +431,24 @@ public class SourceForm extends BasicForm {
 	public void notify(String name, String value) {
 		// handler for mode
 		if (name.equals("mode")) {
+			if (value.equals("Pulsar")) {
+				// Pulsars are point sources, so hide the slide, 
+				// but still use its default value (zero).
+				diameter_display.hide();
+				diameterSF.hide();
+				dutyCycleDisplay.show();
+				dutyCycleSF.show();
+				effectiveBwDisplay.show();
+				effectiveBw.show();
+			} else {
+				diameter_display.show();
+				diameterSF.show();
+				dutyCycleDisplay.hide();
+				dutyCycleSF.hide();
+				effectiveBwDisplay.hide();
+				effectiveBw.hide();
+			}
+			
 			if (value.equals("Spectral Line")) {
 				frame.show();
 				restFrame.setValue(true);
@@ -410,6 +488,13 @@ public class SourceForm extends BasicForm {
 		} else if (name.equals("backend")) {
 			if (value.equals("Mustang")) {
 				topoFreq.setValue("90000");
+			}
+		} else if (name.equals("bandwidth")) {
+			if (!value.equals("NOTHING")) {
+				int bw = Integer.valueOf(value);
+				effectiveBw.setMaxValue(bw);
+				effectiveBw.setValue(bw);
+				effectiveBw.setIncrement(bw / 20);
 			}
 		}
 		notifyAllForms();

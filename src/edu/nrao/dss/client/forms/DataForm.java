@@ -326,6 +326,19 @@ public class DataForm extends BasicForm {
 		
 		} else if (name.equals("mode")) {
 			mode = value;
+			if (value.equals("Pulsar")) {
+				nAverageRefInst.hide();
+				nAverageRef.hide();
+				sigRefSet.hide();
+				//differenceSignal.hide();
+				differenceSignal.setValue(false);
+			} else {
+				sigRefSet.show();
+				nAverageRefInst.show();
+				nAverageRef.show();
+				//differenceSignal.show();
+				differenceSignal.setValue(true);
+			}
 			if (value.equals("Spectral Line")) {
 				smoothing.show();
 				resolution.show();
