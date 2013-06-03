@@ -491,10 +491,12 @@ public class SourceForm extends BasicForm {
 			}
 		} else if (name.equals("bandwidth")) {
 			if (!value.equals("NOTHING")) {
-				int bw = Integer.valueOf(value);
+				int bw = Math.round(Float.valueOf(value));
+				int increment = bw / 20;
+				if (increment == 0) {increment = 1;}
+				effectiveBw.setIncrement(increment);				
 				effectiveBw.setMaxValue(bw);
 				effectiveBw.setValue(bw);
-				effectiveBw.setIncrement(bw / 20);
 			}
 		}
 		notifyAllForms();
