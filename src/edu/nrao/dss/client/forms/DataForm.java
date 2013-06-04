@@ -85,6 +85,8 @@ public class DataForm extends BasicForm {
 		differenceSignal.setBoxLabel("Difference Signal and Reference Observations");
 		differenceSignal.setLabelSeparator("");
 		differenceSignal.setValue(true);
+		
+		
 		nAverageRef = new GeneralText("no_avg_ref","Number of Reference Observations");
 		nAverageRef.setValue("1");
 		nAverageRef.setLabelStyle("display:none");
@@ -174,6 +176,22 @@ public class DataForm extends BasicForm {
 			
 		});
 		
+		differenceSignal.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent be) {
+				// These 2 should be disabled as these values only have an effect when 
+				// 'Difference Signal and Reference Observations' is true
+				boolean enable = differenceSignal.getValue();
+                rSigRef.setEnabled(enable);
+                nAverageRef.setEnabled(enable);
+                if (!enable) {
+                	rSigRef.setValue("1");
+                	nAverageRef.setValue("1");
+                }
+			}
+			
+		});		
 		smoothing_factor_inst = new Label("To improve signal-to-noise you can smooth reference observations to a resolution that is a few times courser than the signal observation.  Select the factor by which you want to smooth the reference observation:");
 				
 		smoothing_factor = new GeneralRadioGroup("smoothing_factor");
