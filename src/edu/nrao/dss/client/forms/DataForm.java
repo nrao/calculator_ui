@@ -51,9 +51,9 @@ public class DataForm extends BasicForm {
 	private GeneralText rSigRef, nAverageRef, resolution, bw;
 	//private GeneralCombo nOverlap;
 	private GeneralCheckbox averagePol, differenceSignal;
-	private GeneralRadioGroup smoothing, smoothing_factor;
+	private GeneralRadioGroup smoothing;
 	private Radio vel_res_rest_frame, freq_res_topo, freq_res_rest_frame, vel_res_topo_frame, freq_res_topo_frame;
-	private Label smoothing_factor_inst, rSigRefInst, nAverageRefInst;
+	private Label rSigRefInst, nAverageRefInst; 
 	private FieldSet smoothingFieldSet, sigRefSet;
 	private Float restFreq, topoFreq, srcVelocity, redshift, bandwidth;
 	private String doppler, frame, mode;
@@ -192,37 +192,6 @@ public class DataForm extends BasicForm {
 			}
 			
 		});		
-		smoothing_factor_inst = new Label("To improve signal-to-noise you can smooth reference observations to a resolution that is a few times courser than the signal observation.  Select the factor by which you want to smooth the reference observation:");
-				
-		smoothing_factor = new GeneralRadioGroup("smoothing_factor");
-		smoothing_factor.setName("smoothing_factor");
-		smoothing_factor.setId("smoothing_factor");
-		smoothing_factor.setFieldLabel("Smoothing Factor");
-		
-		Radio choice = new Radio();
-		choice.setBoxLabel("1");
-		choice.setValue(true);
-		choice.setValueAttribute("1");
-		choice.setName("1");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("2");
-		choice.setValueAttribute("2");
-		choice.setName("2");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("4");
-		choice.setValueAttribute("4");
-		choice.setName("4");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("8");
-		choice.setValueAttribute("8");
-		choice.setName("8");
-		smoothing_factor.add(choice);
 		
 		smoothingFieldSet = new FieldSet();
 		smoothingFieldSet.setHeading("Smoothing");
@@ -248,8 +217,6 @@ public class DataForm extends BasicForm {
 		smoothing.hide();
 		resolution.hide();
 		resolution.setAllowBlank(true);
-		smoothing_factor_inst.hide();
-		smoothing_factor.hide();
 		smoothingFieldSet.hide();
 
 		FormData fd = new FormData(60, 20);
@@ -267,8 +234,6 @@ public class DataForm extends BasicForm {
 		smoothingFieldSet.add(smoothing);
 		smoothingFieldSet.add(resolution);
 		smoothingFieldSet.add(bw);
-		smoothingFieldSet.add(smoothing_factor_inst);
-		smoothingFieldSet.add(smoothing_factor);
 		add(smoothingFieldSet);
 		
 		//attaching fields
@@ -361,16 +326,12 @@ public class DataForm extends BasicForm {
 				smoothing.show();
 				resolution.show();
 				resolution.setAllowBlank(false);
-				smoothing_factor_inst.show();
-				smoothing_factor.show();
 				smoothingFieldSet.show();
 			} else {
 				smoothing.hide();
 				resolution.hide();
 				resolution.setAllowBlank(true);
 				resolution.setValue("1");
-				smoothing_factor_inst.hide();
-				smoothing_factor.hide();
 				smoothingFieldSet.hide();
 			}
 			
