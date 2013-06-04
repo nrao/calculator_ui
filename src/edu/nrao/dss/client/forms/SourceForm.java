@@ -486,8 +486,11 @@ public class SourceForm extends BasicForm {
 			}
 			rx = value;
 		} else if (name.equals("backend")) {
-			if (value.equals("Mustang")) {
+			if (value.equals("Mustang 1.5")) {
 				topoFreq.setValue("90000");
+				topoFreq.disable();
+			} else {
+				topoFreq.enable();
 			}
 		} else if (name.equals("bandwidth")) {
 			if (!value.equals("NOTHING")) {
