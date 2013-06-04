@@ -83,13 +83,13 @@ public abstract class BasicForm extends FormPanel {
 	}
 
 	public void notifyAllForms() {
-
 		for (BasicForm form : observers) {
 			for (Field fe : this.getFields()) {
 				String name = fe.getName();
 				
 				if (name != null) {
-					if (name.equals("frame")) {
+					// Radio Groups need special handling
+					if (name.equals("frame") || name.equals("units")) {
 						Radio choice = ((RadioGroup) fe).getValue();
 						if (choice != null) {
 							form.notify(name, choice.getValueAttribute());

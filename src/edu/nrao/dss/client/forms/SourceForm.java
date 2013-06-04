@@ -498,6 +498,14 @@ public class SourceForm extends BasicForm {
 				effectiveBw.setMaxValue(bw);
 				effectiveBw.setValue(bw);
 			}
+		} else if (name.equals("units")) {
+			// handler for Tmb sensitivity units:
+			// we disable the source size slider when using these units
+			boolean tm_units = !value.equals("tm");
+			diameter.setVisible(tm_units);
+			diameter_display.setVisible(tm_units);
+			diameterSF.setVisible(tm_units);
+			
 		}
 		notifyAllForms();
 

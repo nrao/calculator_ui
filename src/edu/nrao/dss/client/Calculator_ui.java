@@ -137,6 +137,7 @@ public class Calculator_ui implements EntryPoint {
 			
 		});
 		
+		generalForm.addObserver(sourceForm);
 		hardwareForm.addObserver(sourceForm);
 		hardwareForm.addObserver(dataForm);
 		sourceForm.addObserver(dataForm);
