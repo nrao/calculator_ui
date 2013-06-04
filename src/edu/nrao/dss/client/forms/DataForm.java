@@ -403,6 +403,15 @@ public class DataForm extends BasicForm {
 			}			
 		}else if (name.equals("doppler")) {
 			doppler = value;
+		}else if (name.equals("receiver")) {
+			if (value.equals("Ka F1 (26.0 - 31.0 GHz)") || 
+				value.equals("Ka F2 (27.0 - 30.5 GHz)") || 
+				value.equals("Ka F3 (26.0 - 39.8 GHz)")) {
+				averagePol.setValidateOnBlur(false);
+				averagePol.hide();
+			} else {
+				averagePol.show();
+			}
 		}
 		updateBW();
 		
