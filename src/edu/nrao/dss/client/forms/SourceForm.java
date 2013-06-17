@@ -196,7 +196,7 @@ public class SourceForm extends BasicForm {
 		
 		diameter = new Slider();
 		diameter.setMinValue(0);
-		diameter.setMaxValue(12);
+		diameter.setMaxValue(18);
 		diameter.setValue(0);
 		diameter.setIncrement(1);
 		diameter.setUseTip(false);
@@ -502,12 +502,21 @@ public class SourceForm extends BasicForm {
 				effectiveBw.setValue(bw);
 			}
 		} else if (name.equals("units")) {
-			// handler for Tmb sensitivity units:
-			// we disable the source size slider when using these units
-			boolean tm_units = !value.equals("tm");
-			diameter.setVisible(tm_units);
-			diameter_display.setVisible(tm_units);
-			diameterSF.setVisible(tm_units);
+			// Handler sensitivity units & source slider:
+			// We disable the source size slider when using these units.
+			boolean tma_units = !value.equals("tm") && !value.equals("ta");
+			diameter.setVisible(tma_units);
+			diameter_display.setVisible(tma_units);
+			diameterSF.setVisible(tma_units);
+			// If we're using Tr units, we have to gaurd against
+			// a zero source size error.
+			if (value.equals("tr")) {
+				diameter.setMinValue(2);
+				diameter.setValue(2);
+			} else {
+				diameter.setMinValue(0);
+			}
+			
 			
 		}
 		notifyAllForms();
