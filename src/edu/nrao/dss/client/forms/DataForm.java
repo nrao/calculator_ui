@@ -393,7 +393,17 @@ public class DataForm extends BasicForm {
 			}
 		}
 		updateBW();
-		
+
+		// Backend handler:
+		if (name.equals("backend")) {
+			if (value.equals("Mustang 1.5")) {
+			    this.hide();
+			    differenceSignal.setValue(false);
+			} else {
+				this.show();
+				differenceSignal.setValue(true);
+			}
+		}
 //		if (name.equals("backend")) {
 //			if (value.equals("Spectrometer")) {
 //				nOverlap.show();
