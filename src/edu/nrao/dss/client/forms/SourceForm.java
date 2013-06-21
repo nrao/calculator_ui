@@ -196,7 +196,7 @@ public class SourceForm extends BasicForm {
 		
 		diameter = new Slider();
 		diameter.setMinValue(0);
-		diameter.setMaxValue(18);
+		diameter.setMaxValue(26);
 		diameter.setValue(0);
 		diameter.setIncrement(1);
 		diameter.setUseTip(false);
