@@ -140,7 +140,7 @@ public class DataForm extends BasicForm {
 		smoothing.add(freq_res_topo_frame);
 		
 		resolution = new GeneralText("smoothing_resolution", "Desired Resolution (km/s)");
-		resolution.setMaxLength(6);
+		resolution.setMaxLength(9);
 		resolution.setValidator(new Validator () {
 
 			@Override
