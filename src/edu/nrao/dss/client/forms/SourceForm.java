@@ -197,7 +197,7 @@ public class SourceForm extends BasicForm {
 		diameter = new Slider();
 		diameter.setMinValue(0);
 		diameter.setMaxValue(26);
-		diameter.setValue(26); // assuming units of sensitiy == 'tr'
+		diameter.setValue(0); // assuming untis of flux density
 		diameter.setIncrement(1);
 		diameter.setUseTip(false);
 		
