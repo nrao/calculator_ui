@@ -197,7 +197,7 @@ public class SourceForm extends BasicForm {
 		diameter = new Slider();
 		diameter.setMinValue(0);
 		diameter.setMaxValue(26);
-		diameter.setValue(0);
+		diameter.setValue(26); // assuming units of sensitiy == 'tr'
 		diameter.setIncrement(1);
 		diameter.setUseTip(false);
 		
@@ -512,9 +512,10 @@ public class SourceForm extends BasicForm {
 			// a zero source size error.
 			if (value.equals("tr")) {
 				diameter.setMinValue(2);
-				diameter.setValue(2);
+				diameter.setValue(diameter.getMaxValue());
 			} else {
 				diameter.setMinValue(0);
+				diameter.setValue(0);
 			}
 			
 			
