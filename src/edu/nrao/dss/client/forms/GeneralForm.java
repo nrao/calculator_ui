@@ -116,6 +116,7 @@ public class GeneralForm extends BasicForm {
 		choice.setName("flux");
 		choice.setValueAttribute("flux");
 		choice.setToolTip("Use flux density (mJy) for sensitivity units.");
+		choice.setValue(true); // default
 		units.add(choice);
 		
 		choice = new Radio();
@@ -137,7 +138,6 @@ public class GeneralForm extends BasicForm {
 		choice.setName("tr");
 		choice.setValueAttribute("tr");
 		choice.setToolTip("Use Tr (mK, and as measured above the Earth's atmosphere) for sensitivity units.");
-		choice.setValue(true); // default
 		units.add(choice);
 
 		// attach listeners
