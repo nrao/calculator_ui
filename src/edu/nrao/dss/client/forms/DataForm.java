@@ -313,15 +313,16 @@ public class DataForm extends BasicForm {
 				nAverageRefInst.hide();
 				nAverageRef.hide();
 				sigRefSet.hide();
-				//differenceSignal.hide();
+				differenceSignal.hide();
 				differenceSignal.setValue(false);
 			} else {
 				sigRefSet.show();
 				nAverageRefInst.show();
 				nAverageRef.show();
-				//differenceSignal.show();
+				differenceSignal.show();
 				differenceSignal.setValue(true);
 			}
+
 			if (value.equals("Spectral Line")) {
 				smoothing.show();
 				resolution.show();
@@ -334,12 +335,13 @@ public class DataForm extends BasicForm {
 				resolution.setValue("1");
 				smoothingFieldSet.hide();
 			}
-			
+			/*
 			if (value.equals("Total Power")) {
 				differenceSignal.hide();
 			} else {
 				differenceSignal.show();
 			}
+			*/
 
 		} else if (name.equals("polarization")) {
 			if (!value.equals("NOTHING")) {
