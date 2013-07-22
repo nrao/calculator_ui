@@ -183,12 +183,13 @@ public class DataForm extends BasicForm {
 				// These 2 should be disabled as these values only have an effect when 
 				// 'Difference Signal and Reference Observations' is true
 				boolean enable = differenceSignal.getValue();
-                rSigRef.setEnabled(enable);
-                nAverageRef.setEnabled(enable);
+				rSigRef.setReadOnly(!enable);
+				nAverageRef.setReadOnly(!enable);
                 if (!enable) {
                 	rSigRef.setValue("1");
                 	nAverageRef.setValue("1");
                 }
+                
 			}
 			
 		});		
@@ -309,20 +310,12 @@ public class DataForm extends BasicForm {
 		
 		} else if (name.equals("mode")) {
 			mode = value;
-			if (value.equals("Pulsar")) {
-				nAverageRefInst.hide();
-				nAverageRef.hide();
-				sigRefSet.hide();
-				differenceSignal.hide();
-				differenceSignal.setValue(false);
-			} else {
-				sigRefSet.show();
-				nAverageRefInst.show();
-				nAverageRef.show();
-				differenceSignal.show();
-				differenceSignal.setValue(true);
-			}
-
+			
+			boolean pulsarMode = value.equals("Pulsar");
+			sigRefSet.setVisible(!pulsarMode);
+			differenceSignal.setVisible(!pulsarMode);
+			differenceSignal.setValue(!pulsarMode);
+			
 			if (value.equals("Spectral Line")) {
 				smoothing.show();
 				resolution.show();
