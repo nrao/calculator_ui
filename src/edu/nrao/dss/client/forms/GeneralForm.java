@@ -71,7 +71,7 @@ public class GeneralForm extends BasicForm {
 		
 
 		// Desired sensitivity
-		sensitivity = new GeneralText("sensitivity", "Desired Sensitivity");
+		sensitivity = new GeneralText("sensitivity", "Desired Sensitivity (1-sigma)");
 		sensitivity.setMaxLength(6);
 		
 		// Desired time
