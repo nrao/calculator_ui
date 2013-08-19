@@ -116,8 +116,9 @@ public class GeneralForm extends BasicForm {
 		choice.setName("flux");
 		choice.setValueAttribute("flux");
 		choice.setToolTip("Use flux density (mJy) for sensitivity units.");
-		
+		choice.setValue(true); // default
 		units.add(choice);
+		
 		choice = new Radio();
 		choice.setBoxLabel("Antenna Temp., Ta (mK)");
 		choice.setName("ta");
@@ -126,16 +127,23 @@ public class GeneralForm extends BasicForm {
 		units.add(choice);
 
 		choice = new Radio();
+		choice.setBoxLabel("Main Beam Temp., Tmb (mK)");
+		choice.setName("tm");
+		choice.setValueAttribute("tm");
+		choice.setToolTip("Use Tmb (mK, and as measured for the main beam) for sensitivity units.");
+		units.add(choice);
+			
+		choice = new Radio();
 		choice.setBoxLabel("Radiation Temp., Tr (mK)");
 		choice.setName("tr");
 		choice.setValueAttribute("tr");
 		choice.setToolTip("Use Tr (mK, and as measured above the Earth's atmosphere) for sensitivity units.");
-		choice.setValue(true); // default
 		units.add(choice);
 
 		// attach listeners
 		conversion.addListener(Events.Change, new handleConversion());
-
+		units.addListener(Events.Change, new handleUnits());
+		
 		FormData fd = new FormData(50, 20);
 		
 		// attaching fields
@@ -148,6 +156,7 @@ public class GeneralForm extends BasicForm {
 
 	class handleConversion implements Listener<FieldEvent> {
 		public void handleEvent(FieldEvent fe) {
+			
 			if (conversion.getValue().getValueAttribute().equals("Time to Sensitivity")) {
 				sensitivity.hide();
 				sensitivity.setAllowBlank(true);
@@ -164,6 +173,13 @@ public class GeneralForm extends BasicForm {
 		}
 	}
 
+	class handleUnits implements Listener<FieldEvent> {
+		public void handleEvent(FieldEvent fe) {
+			notifyAllForms();
+		}		
+	}
+	
+	
 	public void submit() {
 		String t = time.getValue();
 		time.setValue("" + seconds);

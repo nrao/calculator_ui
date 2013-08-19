@@ -51,9 +51,9 @@ public class DataForm extends BasicForm {
 	private GeneralText rSigRef, nAverageRef, resolution, bw;
 	//private GeneralCombo nOverlap;
 	private GeneralCheckbox averagePol, differenceSignal;
-	private GeneralRadioGroup smoothing, smoothing_factor;
+	private GeneralRadioGroup smoothing;
 	private Radio vel_res_rest_frame, freq_res_topo, freq_res_rest_frame, vel_res_topo_frame, freq_res_topo_frame;
-	private Label smoothing_factor_inst, rSigRefInst, nAverageRefInst;
+	private Label rSigRefInst, nAverageRefInst; 
 	private FieldSet smoothingFieldSet, sigRefSet;
 	private Float restFreq, topoFreq, srcVelocity, redshift, bandwidth;
 	private String doppler, frame, mode;
@@ -85,6 +85,8 @@ public class DataForm extends BasicForm {
 		differenceSignal.setBoxLabel("Difference Signal and Reference Observations");
 		differenceSignal.setLabelSeparator("");
 		differenceSignal.setValue(true);
+		
+		
 		nAverageRef = new GeneralText("no_avg_ref","Number of Reference Observations");
 		nAverageRef.setValue("1");
 		nAverageRef.setLabelStyle("display:none");
@@ -138,7 +140,7 @@ public class DataForm extends BasicForm {
 		smoothing.add(freq_res_topo_frame);
 		
 		resolution = new GeneralText("smoothing_resolution", "Desired Resolution (km/s)");
-		resolution.setMaxLength(6);
+		resolution.setMaxLength(9);
 		resolution.setValidator(new Validator () {
 
 			@Override
@@ -174,37 +176,23 @@ public class DataForm extends BasicForm {
 			
 		});
 		
-		smoothing_factor_inst = new Label("To improve signal-to-noise you can smooth reference observations to a resolution that is a few times courser than the signal observation.  Select the factor by which you want to smooth the reference observation:");
-				
-		smoothing_factor = new GeneralRadioGroup("smoothing_factor");
-		smoothing_factor.setName("smoothing_factor");
-		smoothing_factor.setId("smoothing_factor");
-		smoothing_factor.setFieldLabel("Smoothing Factor");
-		
-		Radio choice = new Radio();
-		choice.setBoxLabel("1");
-		choice.setValue(true);
-		choice.setValueAttribute("1");
-		choice.setName("1");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("2");
-		choice.setValueAttribute("2");
-		choice.setName("2");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("4");
-		choice.setValueAttribute("4");
-		choice.setName("4");
-		smoothing_factor.add(choice);
-		
-		choice = new Radio();
-		choice.setBoxLabel("8");
-		choice.setValueAttribute("8");
-		choice.setName("8");
-		smoothing_factor.add(choice);
+		differenceSignal.addListener(Events.Change, new Listener<FieldEvent> () {
+
+			@Override
+			public void handleEvent(FieldEvent be) {
+				// These 2 should be disabled as these values only have an effect when 
+				// 'Difference Signal and Reference Observations' is true
+				boolean enable = differenceSignal.getValue();
+				rSigRef.setReadOnly(!enable);
+				nAverageRef.setReadOnly(!enable);
+                if (!enable) {
+                	rSigRef.setValue("1");
+                	nAverageRef.setValue("1");
+                }
+                
+			}
+			
+		});		
 		
 		smoothingFieldSet = new FieldSet();
 		smoothingFieldSet.setHeading("Smoothing");
@@ -230,8 +218,6 @@ public class DataForm extends BasicForm {
 		smoothing.hide();
 		resolution.hide();
 		resolution.setAllowBlank(true);
-		smoothing_factor_inst.hide();
-		smoothing_factor.hide();
 		smoothingFieldSet.hide();
 
 		FormData fd = new FormData(60, 20);
@@ -249,8 +235,6 @@ public class DataForm extends BasicForm {
 		smoothingFieldSet.add(smoothing);
 		smoothingFieldSet.add(resolution);
 		smoothingFieldSet.add(bw);
-		smoothingFieldSet.add(smoothing_factor_inst);
-		smoothingFieldSet.add(smoothing_factor);
 		add(smoothingFieldSet);
 		
 		//attaching fields
@@ -326,28 +310,31 @@ public class DataForm extends BasicForm {
 		
 		} else if (name.equals("mode")) {
 			mode = value;
+			
+			boolean pulsarMode = value.equals("Pulsar");
+			sigRefSet.setVisible(!pulsarMode);
+			differenceSignal.setVisible(!pulsarMode);
+			differenceSignal.setValue(!pulsarMode);
+			
 			if (value.equals("Spectral Line")) {
 				smoothing.show();
 				resolution.show();
 				resolution.setAllowBlank(false);
-				smoothing_factor_inst.show();
-				smoothing_factor.show();
 				smoothingFieldSet.show();
 			} else {
 				smoothing.hide();
 				resolution.hide();
 				resolution.setAllowBlank(true);
 				resolution.setValue("1");
-				smoothing_factor_inst.hide();
-				smoothing_factor.hide();
 				smoothingFieldSet.hide();
 			}
-			
+			/*
 			if (value.equals("Total Power")) {
 				differenceSignal.hide();
 			} else {
 				differenceSignal.show();
 			}
+			*/
 
 		} else if (name.equals("polarization")) {
 			if (!value.equals("NOTHING")) {
@@ -390,9 +377,28 @@ public class DataForm extends BasicForm {
 			}			
 		}else if (name.equals("doppler")) {
 			doppler = value;
+		}else if (name.equals("receiver")) {
+			if (value.equals("Ka F1 (26.0 - 31.0 GHz)") || 
+				value.equals("Ka F2 (27.0 - 30.5 GHz)") || 
+				value.equals("Ka F3 (26.0 - 39.8 GHz)")) {
+				averagePol.setValidateOnBlur(false);
+				averagePol.hide();
+			} else {
+				averagePol.show();
+			}
 		}
 		updateBW();
-		
+
+		// Backend handler:
+		if (name.equals("backend")) {
+			if (value.equals("Mustang 1.5")) {
+			    this.hide();
+			    differenceSignal.setValue(false);
+			} else {
+				this.show();
+				differenceSignal.setValue(true);
+			}
+		}
 //		if (name.equals("backend")) {
 //			if (value.equals("Spectrometer")) {
 //				nOverlap.show();
