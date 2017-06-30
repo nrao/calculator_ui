@@ -79,7 +79,7 @@ public class Calculator_ui implements EntryPoint {
 		// Root Content Panel
 		ContentPanel rcp = new ContentPanel();
 		rcp.setFrame(true);
-		rcp.setHeading("Sensitivity Calculator");
+		rcp.setHeading("Sensitivity Calculator 2.4.0");
 		TableLayout tableLayout = new TableLayout(2);
 		tableLayout.setCellVerticalAlign(VerticalAlignment.TOP);
 		rcp.setLayout(tableLayout);
