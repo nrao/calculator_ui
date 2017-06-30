@@ -63,6 +63,7 @@ public class SourceForm extends BasicForm {
 	private LabelField diameter_display, minElevationDisplay, decDisplay, dutyCycleDisplay, effectiveBwDisplay;
 	private double c      = 2.99792458e10; // speed of light in cm/s
 	private String rx;
+	private String backend;
 	
 	
 	public SourceForm() {
@@ -438,8 +439,11 @@ public class SourceForm extends BasicForm {
 				diameterSF.hide();
 				dutyCycleDisplay.show();
 				dutyCycleSF.show();
-				effectiveBwDisplay.show();
-				effectiveBw.show();
+				// Vegas should hide the Effective BW
+				if (!backend.equals("VErsitile GB Astronomical Spectrometer")) {
+				    effectiveBwDisplay.show();
+				    effectiveBw.show();
+				}
 			} else {
 				diameter_display.show();
 				diameterSF.show();
@@ -479,7 +483,7 @@ public class SourceForm extends BasicForm {
 			
 			if (value.contains("(") && !value.equals(rx)) {
 				float freq_low = Float.valueOf(value.substring(value.indexOf("(") + 1, value.indexOf("-") - 1)).floatValue();
-				float freq_hi  = Float.valueOf(value.substring(value.indexOf("-") + 2, value.indexOf("G") - 1)).floatValue();
+				float freq_hi  = Float.valueOf(value.substring(value.indexOf("-") + 2, value.indexOf("GHz") - 1)).floatValue();
 				float freq_mid = (freq_low + (freq_hi - freq_low) / 2) * 1000;
 				restFreq.setValue("" + freq_mid);
 				topoFreq.setValue("" + freq_mid);
@@ -492,6 +496,14 @@ public class SourceForm extends BasicForm {
 			} else {
 				topoFreq.enable();
 			}
+			backend = value;
+			
+			// Vegas should hide the Effective BW
+			// TODO: why is this necessary here as well as when mode is changed?
+			if (backend.equals("VErsitile GB Astronomical Spectrometer")) {
+			    effectiveBwDisplay.hide();
+			    effectiveBw.hide();
+			}			
 		} else if (name.equals("bandwidth")) {
 			if (!value.equals("NOTHING")) {
 				int bw = Math.round(Float.valueOf(value));
